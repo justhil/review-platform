@@ -278,6 +278,11 @@ h3 {
   min-height: 500px;
 }
 
+.practice-content-wrapper > .question-card {
+  position: relative;
+  z-index: 1;
+}
+
 .question-card {
   background: #fff;
   border-radius: 8px;

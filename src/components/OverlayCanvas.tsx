@@ -240,11 +240,21 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
   }, [scheduleSave])
 
   useEffect(() => {
-    resizeCanvas()
+    // 延迟初始化，确保容器尺寸已计算
+    const timer = setTimeout(() => resizeCanvas(), 50)
     const handleResize = () => resizeCanvas()
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', handleResize)
+    }
   }, [resizeCanvas])
+
+  useEffect(() => {
+    if (drawingEnabled) {
+      setTimeout(() => resizeCanvas(), 10)
+    }
+  }, [drawingEnabled, resizeCanvas])
 
   useEffect(() => {
     const canvas = canvasRef.current
