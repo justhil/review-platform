@@ -33,6 +33,8 @@ export function ExamTake() {
   const [elapsedTime, setElapsedTime] = useState(0)
   const [drawingEnabled, setDrawingEnabled] = useState(false)
   const [answers, setAnswers] = useState<AnswerRecord>({})
+  const [showConfirmFinish, setShowConfirmFinish] = useState(false)
+  const [showResult, setShowResult] = useState(false)
   const timerRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -96,11 +98,28 @@ export function ExamTake() {
     return () => clearInterval(saveInterval)
   }, [exam?.id, elapsedTime, exam?.finishedAt])
 
-  const handleFinish = useCallback(() => {
+  const handleConfirmFinish = useCallback(() => {
     if (!exam) return
     updateExam(exam.id, { finishedAt: Date.now(), elapsedTime })
     if (timerRef.current) clearInterval(timerRef.current)
+    setShowConfirmFinish(false)
+    setShowResult(true)
   }, [exam, elapsedTime, updateExam])
+
+  const weakKps = useMemo(() => {
+    const kpErrors: Record<string, number> = {}
+    examQuestions.forEach(q => {
+      const rec = answers[q.id]
+      if (rec?.submitted && !rec.correct) {
+        q.kp.forEach(kpId => { kpErrors[kpId] = (kpErrors[kpId] || 0) + 1 })
+      }
+    })
+    return Object.entries(kpErrors)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([id, count]) => ({ kp: kpMap[id], count }))
+      .filter(item => item.kp)
+  }, [examQuestions, answers, kpMap])
 
   const handleSaveDrawing = useCallback((dataUrl: string) => {
     if (!exam || !currentQ) return
@@ -202,8 +221,8 @@ export function ExamTake() {
         <h1>{exam.title}</h1>
         <div className="exam-timer-bar">
           <span className={`timer ${isOvertime ? 'overtime' : ''}`}>{formatTime(elapsedTime)} / {exam.timeLimit}分钟</span>
-          {!isFinished && <button className="btn danger" onClick={handleFinish}>交卷</button>}
-          {isFinished && <span className="finished-badge">已完成</span>}
+          {!isFinished && <button className="btn danger" onClick={() => setShowConfirmFinish(true)}>交卷</button>}
+          {isFinished && <button className="btn primary" onClick={() => setShowResult(true)}>查看成绩</button>}
         </div>
       </div>
 
@@ -374,6 +393,54 @@ export function ExamTake() {
         <button className="btn" onClick={handleNext} disabled={currentIndex === examQuestions.length - 1}>下一题</button>
         <button className="btn" onClick={() => navigate(`/${subjectId}/exams`)}>返回列表</button>
       </div>
+
+      {showConfirmFinish && (
+        <div className="modal-overlay" onClick={() => setShowConfirmFinish(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h2>确认交卷？</h2>
+            <p>已答 {examStats.answered}/{examStats.total} 题，还有 {examStats.total - examStats.answered} 题未作答</p>
+            <p>用时：{formatTime(elapsedTime)}</p>
+            <div className="modal-actions">
+              <button className="btn" onClick={() => setShowConfirmFinish(false)}>继续答题</button>
+              <button className="btn danger" onClick={handleConfirmFinish}>确认交卷</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showResult && (
+        <div className="modal-overlay" onClick={() => setShowResult(false)}>
+          <div className="modal result-modal" onClick={e => e.stopPropagation()}>
+            <h2>考试成绩</h2>
+            <div className="result-score">
+              <div className="score-circle">
+                <span className="score-value">{examStats.total > 0 ? Math.round(examStats.correct / examStats.total * 100) : 0}</span>
+                <span className="score-label">分</span>
+              </div>
+            </div>
+            <div className="result-stats">
+              <div className="result-stat"><span className="label">总题数</span><span>{examStats.total}</span></div>
+              <div className="result-stat correct"><span className="label">正确</span><span>{examStats.correct}</span></div>
+              <div className="result-stat wrong"><span className="label">错误</span><span>{examStats.wrong}</span></div>
+              <div className="result-stat"><span className="label">用时</span><span>{formatTime(elapsedTime)}</span></div>
+            </div>
+            {weakKps.length > 0 && (
+              <div className="result-weak">
+                <h4>薄弱知识点</h4>
+                <ul>
+                  {weakKps.map(({ kp, count }) => (
+                    <li key={kp.id}>{kp.title} <span className="error-count">错{count}题</span></li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="modal-actions">
+              <button className="btn" onClick={() => setShowResult(false)}>继续复习</button>
+              <button className="btn primary" onClick={() => navigate(`/${subjectId}/exams`)}>返回列表</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

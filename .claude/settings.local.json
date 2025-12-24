@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(docx)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(if not exist:*)",
+      "Bash(powershell:*)",
+      "mcp__auggie-mcp__codebase-retrieval",
+      "Bash(dir:*)",
+      "Bash(iconv:*)",
+      "Bash(Get-ChildItem:*)",
+      "Bash(Select-Object:*)",
+      "Skill(pdf-processing-pro)",
+      "Bash(pdftotext:*)",
+      "Bash(npm run build)",
+      "mcp__sequentialthinking__sequentialthinking"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

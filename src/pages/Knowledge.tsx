@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSubject } from '../context/SubjectContext'
 import { Latex, MixedLatex } from '../components/Latex'
 
 export function Knowledge() {
-  const { config, data } = useSubject()
+  const navigate = useNavigate()
+  const { config, data, subjectId } = useSubject()
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null)
   const [expandedKp, setExpandedKp] = useState<string | null>(null)
 
@@ -12,6 +14,12 @@ export function Knowledge() {
     config.chapters.forEach(ch => { map[ch.id] = ch.name })
     return map
   }, [config.chapters])
+
+  const kpQuestionCount = useMemo(() => {
+    const count: Record<string, number> = {}
+    data.questions.forEach(q => q.kp.forEach(kpId => { count[kpId] = (count[kpId] || 0) + 1 }))
+    return count
+  }, [data.questions])
 
   const filteredKps = selectedChapter
     ? data.knowledgePoints.filter(kp => kp.chapter === selectedChapter)
@@ -38,6 +46,7 @@ export function Knowledge() {
             <div className="kp-header">
               <span className="kp-chapter">{chapterMap[kp.chapter]}</span>
               <span className="kp-title">{kp.title}</span>
+              <span className="kp-question-count">{kpQuestionCount[kp.id] || 0}题</span>
               <span className={`kp-difficulty d${kp.difficulty}`}>难度{kp.difficulty}</span>
             </div>
 

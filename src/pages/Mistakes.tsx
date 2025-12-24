@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSubject } from '../context/SubjectContext'
 import { useProgress } from '../hooks/useProgress'
 import { useWeakPoints } from '../hooks/useWeakPoints'
@@ -14,9 +14,11 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 export function Mistakes() {
-  const { config, data } = useSubject()
+  const navigate = useNavigate()
+  const { config, data, subjectId } = useSubject()
   const { progress, resetProgress } = useProgress()
   const weakPoints = useWeakPoints(data.knowledgePoints, data.questions, progress)
+  const [expandedQ, setExpandedQ] = useState<string | null>(null)
 
   const mistakeQuestions = useMemo(() => {
     return data.questions.filter(q => {
@@ -65,17 +67,27 @@ export function Mistakes() {
           <p className="empty-hint">暂无错题，继续保持！</p>
         ) : (
           <div className="mistake-list">
-            {mistakeQuestions.map(q => {
+            {mistakeQuestions.map((q, idx) => {
               const p = progress.question[q.id]
+              const isExpanded = expandedQ === q.id
               return (
-                <div key={q.id} className="mistake-card">
+                <div key={q.id} className="mistake-card" onClick={() => setExpandedQ(isExpanded ? null : q.id)}>
                   <div className="mistake-header">
                     <span className="mistake-type">{TYPE_LABELS[q.qtype]}</span>
                     <span className={`state-badge ${p?.state}`}>{p?.state === 'unsure' ? '不熟' : '不会'}</span>
                   </div>
                   <div className="mistake-stem"><MixedLatex>{q.stem}</MixedLatex></div>
-                  <div className="mistake-kps">
-                    {q.kp.map(id => <span key={id} className="tag">{kpMap[id] || id}</span>)}
+                  {isExpanded && (
+                    <div className="mistake-answer">
+                      <div className="answer"><strong>答案：</strong><MixedLatex>{Array.isArray(q.answer) ? q.answer.join('、') : q.answer}</MixedLatex></div>
+                      {q.analysis && <div className="analysis"><strong>解析：</strong><MixedLatex>{q.analysis}</MixedLatex></div>}
+                    </div>
+                  )}
+                  <div className="mistake-footer">
+                    <div className="mistake-kps">
+                      {q.kp.map(id => <span key={id} className="tag">{kpMap[id] || id}</span>)}
+                    </div>
+                    <button className="btn small" onClick={e => { e.stopPropagation(); navigate(`/${subjectId}/practice?type=${q.qtype}`) }}>去练习</button>
                   </div>
                 </div>
               )

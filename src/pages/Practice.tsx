@@ -29,6 +29,7 @@ export function Practice() {
   const [showKpDetail, setShowKpDetail] = useState<string | null>(null)
   const [drawingEnabled, setDrawingEnabled] = useState(false)
   const [drawings, setDrawings] = useState<Record<string, string>>({})
+  const [showComplete, setShowComplete] = useState(false)
 
   const handleSaveDrawing = (dataUrl: string) => {
     if (!currentQ) return
@@ -92,7 +93,16 @@ export function Practice() {
       setSelectedOption(null)
       setShowFormulas(false)
       setShowKpDetail(null)
+    } else {
+      setShowComplete(true)
     }
+  }
+
+  const handleRestart = () => {
+    setCurrentIndex(0)
+    setShowAnswer(false)
+    setSelectedOption(null)
+    setShowComplete(false)
   }
 
   const handlePrev = () => {
@@ -156,6 +166,19 @@ export function Practice() {
         <span>{currentIndex + 1} / {displayQuestions.length}</span>
         {currentProgress && <span className={`state-badge ${currentProgress.state}`}>{currentProgress.state === 'known' ? '会' : currentProgress.state === 'unsure' ? '不熟' : '不会'}</span>}
       </div>
+
+      {showComplete && (
+        <div className="modal-overlay" onClick={() => setShowComplete(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h2>🎉 练习完成</h2>
+            <p>已完成本组 {displayQuestions.length} 道题目的练习</p>
+            <div className="modal-actions">
+              <button className="btn" onClick={handleRestart}>重新开始</button>
+              <button className="btn primary" onClick={() => setShowComplete(false)}>继续复习</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="practice-content-wrapper">
         <div className="question-card">
