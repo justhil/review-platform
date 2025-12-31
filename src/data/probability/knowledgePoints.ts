@@ -66,7 +66,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 - $E(X+Y) = E(X)+E(Y)$
 - 若X,Y独立：$D(X+Y) = D(X)+D(Y)$`,
     formulas: ['prob-f-07', 'prob-f-08', 'prob-f-09'],
-    examples: ['prob-2023a-fill-04'],
+    examples: ['prob-2023a-fill-04', 'prob-2023b-single-04'],
     difficulty: 3,
     freqScore: 9
   },

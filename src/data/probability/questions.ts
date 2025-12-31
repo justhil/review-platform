@@ -10,9 +10,10 @@ export const probabilityQuestions: Question[] = [
       '$P(A)=P(A_1A_2)$',
       '$P(A)=P(A_1+A_2)$',
       '$P(A)=P(A_1)+P(A_2)-1$',
-      '$P(A)=P(A_1)+P(A_2)-1$'
+      '$P(A)=P(A_1)+P(A_2)-P(A_1A_2)$'
     ],
-    answer: 'C',
+    answer: 'D',
+    analysis: '加法公式：$P(A_1\\cup A_2)=P(A_1)+P(A_2)-P(A_1A_2)$。A选项把并集写成交集，错；B选项$A_1+A_2$就是$A_1\\cup A_2$，等式两边相同没意义；C选项减1无依据；D正确。',
     kp: ['prob-kp-01'],
     source: '2022-2023学年A卷',
     difficulty: 2
@@ -20,9 +21,10 @@ export const probabilityQuestions: Question[] = [
   {
     id: 'prob-2023a-single-02',
     qtype: 'single',
-    stem: '设$A$、$B$为两个随机事件，$P(B)=0.5$，$P(A\\cup B)=0.3$，则$P(B|\\bar{A})=$',
-    options: ['$0.1$', '$0.2$', '$0.3$', '$0.4$'],
-    answer: 'B',
+    stem: '设$A$、$B$为两个随机事件，$P(A)=0.5$，$P(B)=0.5$，$P(A\\cup B)=0.8$，则$P(B|\\bar{A})=$',
+    options: ['$0.1$', '$0.2$', '$0.3$', '$0.6$'],
+    answer: 'D',
+    analysis: '**思路**：求$P(B|\\bar{A})=\\frac{P(\\bar{A}B)}{P(\\bar{A})}$。\n**步骤**：①$P(\\bar{A})=1-0.5=0.5$；②由加法公式$P(AB)=0.5+0.5-0.8=0.2$；③$P(\\bar{A}B)=P(B)-P(AB)=0.5-0.2=0.3$；④$P(B|\\bar{A})=\\frac{0.3}{0.5}=0.6$。',
     kp: ['prob-kp-01'],
     source: '2022-2023学年A卷',
     difficulty: 2
@@ -30,14 +32,15 @@ export const probabilityQuestions: Question[] = [
   {
     id: 'prob-2023a-single-03',
     qtype: 'single',
-    stem: '设随机变量$X$的概率密度为$f(x)$，分布函数为$F(x)$，且$f(x)=f(-x)$，$a$为常数，则',
+    stem: '设随机变量$X$的概率密度为$f(x)$，分布函数为$F(x)$，且$f(x)=f(-x)$，则',
     options: [
       '$F(a)=F(-a)$',
       '$F(a)=2F(a)-1$',
-      '$a$处$f(a)=1$，$\\int_0^a f(x)dx$',
-      '$F(a)=1$，$a$处$\\int_{-\\infty}^{20} f(x)dx$'
+      '$F(-a)=1-F(a)$',
+      '$F(a)+F(-a)=0$'
     ],
-    answer: 'D',
+    answer: 'C',
+    analysis: '**关键**：$f(x)=f(-x)$说明密度函数关于$y$轴对称（偶函数）。\n**推导**：$F(-a)=\\int_{-\\infty}^{-a}f(x)dx$。令$t=-x$，则$F(-a)=\\int_{\\infty}^{a}f(-t)(-dt)=\\int_a^{\\infty}f(t)dt=1-F(a)$。\n**记忆**：对称分布的分布函数满足$F(-a)+F(a)=1$。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -49,10 +52,11 @@ export const probabilityQuestions: Question[] = [
     options: [
       '$p_1<p_2<p_3$',
       '$p_2<p_1<p_3$',
-      '$p_3<p_1<p_2$',
-      '$p_3<p_2<p_1$'
+      '$p_3<p_2<p_1$',
+      '$p_3<p_1<p_2$'
     ],
-    answer: 'A',
+    answer: 'C',
+    analysis: '**思路**：标准化后比较。\n**计算**：$p_1=P(-2<X_1<2)=\\Phi(2)-\\Phi(-2)=2\\Phi(2)-1\\approx 0.954$（区间覆盖$\\pm 2\\sigma$）；$p_2=P(-2<X_2<2)=\\Phi(1)-\\Phi(-1)=2\\Phi(1)-1\\approx 0.683$（$\\sigma=2$，区间只覆盖$\\pm 1\\sigma$）；$p_3=P(-2<X_3<2)=\\Phi(-1)-\\Phi(-7/3)$很小（均值为5，区间在均值左侧很远）。\n**结论**：$p_3<p_2<p_1$。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -63,6 +67,7 @@ export const probabilityQuestions: Question[] = [
     stem: '设$X_1,X_2,X_3,X_4$是来自正态总体$X\\sim N(1,\\sigma^2)(\\sigma>0)$的简单随机样本，则$\\frac{X_1-X_2}{\\sqrt{(X_3-X_4)^2/2}}$服从',
     options: ['$N(0,1)$', '$t(1)$', '$\\chi^2(1)$', '$F(1,1)$'],
     answer: 'B',
+    analysis: '**分子**：$X_1-X_2\\sim N(0,2\\sigma^2)$，标准化得$\\frac{X_1-X_2}{\\sqrt{2}\\sigma}\\sim N(0,1)$。\n**分母**：$X_3-X_4\\sim N(0,2\\sigma^2)$，所以$\\frac{(X_3-X_4)^2}{2\\sigma^2}\\sim\\chi^2(1)$。\n**合并**：原式$=\\frac{(X_1-X_2)/(\\sqrt{2}\\sigma)}{\\sqrt{(X_3-X_4)^2/(2\\sigma^2)}}=\\frac{N(0,1)}{\\sqrt{\\chi^2(1)/1}}\\sim t(1)$。',
     kp: ['prob-kp-05'],
     source: '2022-2023学年A卷',
     difficulty: 4
@@ -73,7 +78,8 @@ export const probabilityQuestions: Question[] = [
     id: 'prob-2023a-fill-01',
     qtype: 'fill',
     stem: '设$P(A)=\\frac{1}{4}$，$P(B|A)=\\frac{1}{3}$，$P(A|B)=\\frac{1}{2}$，则$P(A\\cup B)=$______',
-    answer: '$\\frac{1}{3}$',
+    answer: '$\\frac{5}{12}$',
+    analysis: '**步骤**：①由乘法公式$P(AB)=P(A)P(B|A)=\\frac{1}{4}\\times\\frac{1}{3}=\\frac{1}{12}$；②由$P(A|B)=\\frac{P(AB)}{P(B)}$得$P(B)=\\frac{P(AB)}{P(A|B)}=\\frac{1/12}{1/2}=\\frac{1}{6}$；③由加法公式$P(A\\cup B)=P(A)+P(B)-P(AB)=\\frac{1}{4}+\\frac{1}{6}-\\frac{1}{12}=\\frac{5}{12}$。',
     kp: ['prob-kp-01'],
     source: '2022-2023学年A卷',
     difficulty: 2
@@ -83,6 +89,7 @@ export const probabilityQuestions: Question[] = [
     qtype: 'fill',
     stem: '设随机变量$X$的概率密度为$f(x)=\\begin{cases}2x, & x\\in(0,1)\\\\0, & x\\notin(0,1)\\end{cases}$，$a\\in(0,1)$，若$P(X<a)=P(X>a)$，则$a=$______',
     answer: '$\\frac{\\sqrt{2}}{2}$',
+    analysis: '**条件**：$P(X<a)=P(X>a)$意味着$a$是中位数，即$P(X<a)=0.5$。\n**计算**：$P(X<a)=\\int_0^a 2x\\,dx=x^2\\big|_0^a=a^2=0.5$，解得$a=\\frac{1}{\\sqrt{2}}=\\frac{\\sqrt{2}}{2}$。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 2
@@ -90,8 +97,9 @@ export const probabilityQuestions: Question[] = [
   {
     id: 'prob-2023a-fill-03',
     qtype: 'fill',
-    stem: '设随机变量$X$的分布律为$P\\{X=k\\}=ae^{-k^2}$，$k=0,1,2,\\ldots$，则常数$a=$______',
-    answer: '$e^{-2}-e^{-3}$',
+    stem: '设随机变量$X$的分布律为$P\\{X=k\\}=a\\cdot 2^{-k}$，$k=1,2,3,\\ldots$，则常数$a=$______',
+    answer: '$1$',
+    analysis: '**原理**：概率之和为1，即$\\sum_{k=1}^{\\infty}P(X=k)=1$。\n**计算**：$\\sum_{k=1}^{\\infty}a\\cdot 2^{-k}=a\\cdot\\sum_{k=1}^{\\infty}(\\frac{1}{2})^k=a\\cdot\\frac{1/2}{1-1/2}=a\\cdot 1=a$。\n所以$a=1$。\n**公式**：等比级数$\\sum_{k=1}^{\\infty}r^k=\\frac{r}{1-r}$（$|r|<1$）。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -99,8 +107,9 @@ export const probabilityQuestions: Question[] = [
   {
     id: 'prob-2023a-fill-04',
     qtype: 'fill',
-    stem: '设$X\\sim P(\\lambda)$，$E(X+1)(X+2)=1$，则$\\lambda=$______',
+    stem: '设$X\\sim P(\\lambda)$，$E[(X+1)(X+2)]=6$，则$\\lambda=$______',
     answer: '$1$',
+    analysis: '**展开**：$E[(X+1)(X+2)]=E[X^2+3X+2]=E(X^2)+3E(X)+2$。\n**泊松分布性质**：$E(X)=\\lambda$，$D(X)=\\lambda$，所以$E(X^2)=D(X)+[E(X)]^2=\\lambda+\\lambda^2$。\n**代入**：$\\lambda+\\lambda^2+3\\lambda+2=\\lambda^2+4\\lambda+2=6$，解得$\\lambda=1$。',
     kp: ['prob-kp-03'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -110,6 +119,7 @@ export const probabilityQuestions: Question[] = [
     qtype: 'fill',
     stem: '设随机变量$X$的概率密度为$f(x)=\\frac{1}{2}e^{-|x|}$（$-\\infty<x<+\\infty$），$X_1,X_2,\\ldots,X_n$是来自$X$的简单随机样本，$S^2$为样本方差，则$E(S^2)=$______',
     answer: '$2$',
+    analysis: '**关键公式**：$E(S^2)=\\sigma^2$（样本方差是总体方差的无偏估计）。\n**求总体方差**：由对称性$E(X)=0$。$E(X^2)=\\int_{-\\infty}^{+\\infty}x^2\\cdot\\frac{1}{2}e^{-|x|}dx=\\int_0^{+\\infty}x^2 e^{-x}dx$。\n用分部积分：$\\int_0^{\\infty}x^2 e^{-x}dx=2$（Gamma函数$\\Gamma(3)=2!$）。\n所以$D(X)=E(X^2)-[E(X)]^2=2-0=2$，故$E(S^2)=2$。',
     kp: ['prob-kp-05'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -121,7 +131,7 @@ export const probabilityQuestions: Question[] = [
     qtype: 'calc',
     stem: '某工厂有10台机器，每台机器在一周内发生故障的概率为0.1，各机器是否发生故障相互独立。求：(1) 一周内恰有3台机器发生故障的概率；(2) 一周内至少有2台机器发生故障的概率。',
     answer: '(1) $C_{10}^3 \\cdot 0.1^3 \\cdot 0.9^7 \\approx 0.057$；(2) $1-C_{10}^0 \\cdot 0.9^{10}-C_{10}^1 \\cdot 0.1 \\cdot 0.9^9 \\approx 0.264$',
-    analysis: '这是二项分布问题。设$X$为一周内发生故障的机器数，则$X\\sim B(10,0.1)$。',
+    analysis: '**识别模型**：n=10次独立试验，每次成功概率p=0.1 → 二项分布$X\\sim B(10,0.1)$。\n**公式**：$P(X=k)=C_n^k p^k(1-p)^{n-k}$。\n**(1)** $P(X=3)=C_{10}^3\\cdot 0.1^3\\cdot 0.9^7=120\\times 0.001\\times 0.478=0.057$。\n**(2)** "至少2台"用补集：$P(X\\geq 2)=1-P(X=0)-P(X=1)=1-0.9^{10}-10\\times 0.1\\times 0.9^9\\approx 0.264$。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 2
@@ -130,7 +140,8 @@ export const probabilityQuestions: Question[] = [
     id: 'prob-2023a-calc-02',
     qtype: 'calc',
     stem: '设随机变量$X$的概率密度为$f(x)=\\begin{cases}6x(1-x), & 0<x<1\\\\0, & \\text{其他}\\end{cases}$，求：(1) $X$的分布函数；(2) $Y=2X+1$的概率密度。',
-    answer: '(1) $F(x)=\\begin{cases}0, & x<0\\\\3x^2-2x^3, & 0\\leq x\\leq 1\\\\1, & x>1\\end{cases}$；(2) $f_Y(y)=\\begin{cases}\\frac{3}{4}(y^2-4y+3), & 1<y<3\\\\0, & \\text{其他}\\end{cases}$',
+    answer: '(1) $F(x)=\\begin{cases}0, & x<0\\\\3x^2-2x^3, & 0\\leq x\\leq 1\\\\1, & x>1\\end{cases}$；(2) $f_Y(y)=\\begin{cases}\\frac{3}{2}(y-1)(3-y)/4, & 1<y<3\\\\0, & \\text{其他}\\end{cases}$',
+    analysis: '**第(1)问**：$F(x)=\\int_{-\\infty}^x f(t)dt$。当$0\\leq x\\leq 1$时，$F(x)=\\int_0^x 6t(1-t)dt=6(\\frac{t^2}{2}-\\frac{t^3}{3})\\big|_0^x=3x^2-2x^3$。\n**第(2)问**：用公式法。$Y=2X+1$，则$X=\\frac{Y-1}{2}$，$\\frac{dx}{dy}=\\frac{1}{2}$。$f_Y(y)=f_X(\\frac{y-1}{2})\\cdot|\\frac{1}{2}|=6\\cdot\\frac{y-1}{2}\\cdot(1-\\frac{y-1}{2})\\cdot\\frac{1}{2}=\\frac{3(y-1)(3-y)}{4}$，$1<y<3$。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -140,6 +151,7 @@ export const probabilityQuestions: Question[] = [
     qtype: 'calc',
     stem: '设二维随机变量$(X,Y)$的联合概率密度为$f(x,y)=\\begin{cases}\\frac{x^2+xy}{3}, & 0<x<1,0<y<2\\\\0, & \\text{其他}\\end{cases}$，求：(1) $X$和$Y$的边缘概率密度；(2) 判断$X$与$Y$是否独立。',
     answer: '(1) $f_X(x)=\\frac{2x^2+2x}{3}$（$0<x<1$），$f_Y(y)=\\frac{1}{3}+\\frac{y}{6}$（$0<y<2$）；(2) 因为$f(x,y)\\neq f_X(x)f_Y(y)$，所以$X$与$Y$不独立。',
+    analysis: '**第(1)问**：边缘密度=对另一变量积分。\n$f_X(x)=\\int_0^2\\frac{x^2+xy}{3}dy=\\frac{1}{3}(x^2 y+\\frac{xy^2}{2})\\big|_0^2=\\frac{2x^2+2x}{3}$（$0<x<1$）。\n$f_Y(y)=\\int_0^1\\frac{x^2+xy}{3}dx=\\frac{1}{3}(\\frac{x^3}{3}+\\frac{x^2 y}{2})\\big|_0^1=\\frac{1}{9}+\\frac{y}{6}$（$0<y<2$）。\n**第(2)问**：若独立则$f(x,y)=f_X(x)\\cdot f_Y(y)$。验证：$f_X(x)f_Y(y)=\\frac{2x^2+2x}{3}\\cdot(\\frac{1}{9}+\\frac{y}{6})\\neq\\frac{x^2+xy}{3}$，故不独立。',
     kp: ['prob-kp-02'],
     source: '2022-2023学年A卷',
     difficulty: 3
@@ -147,8 +159,9 @@ export const probabilityQuestions: Question[] = [
   {
     id: 'prob-2023a-calc-04',
     qtype: 'calc',
-    stem: '设随机变量$X$的概率密度为$f(x)=\\begin{cases}\\frac{2}{\\lambda}xe^{-\\frac{x}{\\lambda}}, & x>0\\\\0, & x\\leq 0\\end{cases}$（$\\lambda>0$），$X_1,X_2,\\ldots,X_n$是来自$X$的简单随机样本，求$\\lambda$的矩估计量和极大似然估计量。',
+    stem: '设随机变量$X$的概率密度为$f(x)=\\begin{cases}\\frac{1}{\\lambda^2}xe^{-\\frac{x}{\\lambda}}, & x>0\\\\0, & x\\leq 0\\end{cases}$（$\\lambda>0$），$X_1,X_2,\\ldots,X_n$是来自$X$的简单随机样本，求$\\lambda$的矩估计量和极大似然估计量。',
     answer: '矩估计量：$\\hat{\\lambda}=\\frac{\\bar{X}}{2}$；极大似然估计量：$\\hat{\\lambda}=\\frac{\\bar{X}}{2}$',
+    analysis: '**矩估计**：先求$E(X)=\\int_0^{\\infty}x\\cdot\\frac{x}{\\lambda^2}e^{-x/\\lambda}dx=\\frac{1}{\\lambda^2}\\int_0^{\\infty}x^2 e^{-x/\\lambda}dx=2\\lambda$（Gamma函数）。令$E(X)=\\bar{X}$，得$\\hat{\\lambda}=\\frac{\\bar{X}}{2}$。\n**极大似然估计**：$L=\\prod_{i=1}^n\\frac{x_i}{\\lambda^2}e^{-x_i/\\lambda}=\\frac{\\prod x_i}{\\lambda^{2n}}e^{-\\sum x_i/\\lambda}$。取对数$\\ln L=\\sum\\ln x_i-2n\\ln\\lambda-\\frac{\\sum x_i}{\\lambda}$。令$\\frac{d\\ln L}{d\\lambda}=-\\frac{2n}{\\lambda}+\\frac{\\sum x_i}{\\lambda^2}=0$，解得$\\hat{\\lambda}=\\frac{\\bar{X}}{2}$。',
     kp: ['prob-kp-05'],
     source: '2022-2023学年A卷',
     difficulty: 4
@@ -157,7 +170,8 @@ export const probabilityQuestions: Question[] = [
     id: 'prob-2023a-calc-05',
     qtype: 'calc',
     stem: '设$X_1,X_2,\\ldots,X_n$是来自总体$X$的简单随机样本，$\\bar{X}$为样本均值，证明：$E(X_i-\\bar{X})=0$，$D(X_i-\\bar{X})=\\frac{n-1}{n}\\sigma^2$。',
-    answer: '证明：$E(X_i-\\bar{X})=E(X_i)-E(\\bar{X})=\\mu-\\mu=0$；$D(X_i-\\bar{X})=D(X_i-\\frac{1}{n}\\sum_{j=1}^n X_j)=\\frac{(n-1)^2}{n^2}\\sigma^2+\\frac{n-1}{n^2}\\sigma^2=\\frac{n-1}{n}\\sigma^2$',
+    answer: '证明：$E(X_i-\\bar{X})=E(X_i)-E(\\bar{X})=\\mu-\\mu=0$；$D(X_i-\\bar{X})=\\frac{n-1}{n}\\sigma^2$',
+    analysis: '**证$E(X_i-\\bar{X})=0$**：$E(X_i-\\bar{X})=E(X_i)-E(\\bar{X})=\\mu-\\mu=0$。\n**证$D(X_i-\\bar{X})$**：将$X_i-\\bar{X}$改写为$X_i-\\frac{1}{n}\\sum_{j=1}^n X_j=(1-\\frac{1}{n})X_i-\\frac{1}{n}\\sum_{j\\neq i}X_j$。\n由独立性：$D(X_i-\\bar{X})=(1-\\frac{1}{n})^2\\sigma^2+\\frac{n-1}{n^2}\\sigma^2=\\frac{(n-1)^2+n-1}{n^2}\\sigma^2=\\frac{(n-1)n}{n^2}\\sigma^2=\\frac{n-1}{n}\\sigma^2$。',
     kp: ['prob-kp-05'],
     source: '2022-2023学年A卷',
     difficulty: 4
@@ -228,8 +242,8 @@ export const probabilityQuestions: Question[] = [
     id: 'prob-2016a-fill-02',
     qtype: 'fill',
     stem: '设$X_1,X_2,X_3$是来自正态总体$X\\sim N(\\mu,\\sigma^2)$的简单随机样本，$\\hat{\\mu}_1=\\frac{1}{5}X_1+\\frac{3}{10}X_2+\\frac{1}{2}X_3$，$\\hat{\\mu}_2=\\frac{1}{3}X_1+\\frac{1}{4}X_2+\\frac{5}{12}X_3$，$\\hat{\\mu}_3=\\frac{1}{3}(X_1+X_2+X_3)$。三个估计量中，$\\mu$的无偏估计量是______，其中最有效的是______。',
-    answer: '$\\hat{\\mu}_3$；$\\hat{\\mu}_3$',
-    analysis: '无偏性：$E(\\hat{\\mu})=\\mu$，即系数之和为$1$。$\\hat{\\mu}_1$系数和$=1$，$\\hat{\\mu}_2$系数和$=1$，$\\hat{\\mu}_3$系数和$=1$，三者都是无偏估计。有效性比较方差：$D(\\hat{\\mu}_1)=(\\frac{1}{25}+\\frac{9}{100}+\\frac{1}{4})\\sigma^2=0.38\\sigma^2$，$D(\\hat{\\mu}_2)=(\\frac{1}{9}+\\frac{1}{16}+\\frac{25}{144})\\sigma^2=0.347\\sigma^2$，$D(\\hat{\\mu}_3)=\\frac{1}{3}\\sigma^2=0.333\\sigma^2$。$\\hat{\\mu}_3$方差最小，最有效。',
+    answer: '$\\hat{\\mu}_1,\\hat{\\mu}_2,\\hat{\\mu}_3$；$\\hat{\\mu}_3$',
+    analysis: '**无偏性判断**：$E(\\hat{\\mu})=\\mu$当且仅当系数之和为1。\n$\\hat{\\mu}_1$：$\\frac{1}{5}+\\frac{3}{10}+\\frac{1}{2}=\\frac{2+3+5}{10}=1$ ✓\n$\\hat{\\mu}_2$：$\\frac{1}{3}+\\frac{1}{4}+\\frac{5}{12}=\\frac{4+3+5}{12}=1$ ✓\n$\\hat{\\mu}_3$：$\\frac{1}{3}+\\frac{1}{3}+\\frac{1}{3}=1$ ✓\n三者都是无偏估计。\n**有效性比较**（方差越小越有效）：\n$D(\\hat{\\mu}_1)=(\\frac{1}{25}+\\frac{9}{100}+\\frac{1}{4})\\sigma^2=0.38\\sigma^2$\n$D(\\hat{\\mu}_2)=(\\frac{1}{9}+\\frac{1}{16}+\\frac{25}{144})\\sigma^2\\approx 0.347\\sigma^2$\n$D(\\hat{\\mu}_3)=3\\times\\frac{1}{9}\\sigma^2=\\frac{1}{3}\\sigma^2\\approx 0.333\\sigma^2$\n$\\hat{\\mu}_3$方差最小，最有效。',
     kp: ['prob-kp-05'],
     source: '2015-2016学年',
     difficulty: 4
