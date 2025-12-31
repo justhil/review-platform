@@ -41,7 +41,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 
 分布函数：$F(x) = P(X \\leq x)$`,
     formulas: ['prob-f-04', 'prob-f-05', 'prob-f-06'],
-    examples: ['prob-2023a-single-03', 'prob-2023a-single-04', 'prob-2023a-fill-02', 'prob-2023a-fill-03', 'prob-2023a-calc-01', 'prob-2023a-calc-02', 'prob-2023a-calc-03', 'prob-2023b-single-02', 'prob-2023b-single-03', 'prob-2023b-single-04', 'prob-2016a-fill-01'],
+    examples: ['prob-2023a-single-03', 'prob-2023a-single-04', 'prob-2023a-fill-02', 'prob-2023a-fill-03', 'prob-2023a-calc-01', 'prob-2023a-calc-02', 'prob-2023a-calc-03', 'prob-2023b-single-02', 'prob-2023b-single-03', 'prob-2023b-single-04', 'prob-2016a-fill-01', 'prob-2016a-single-02', 'prob-2015a-fill-03', 'prob-2015a-calc-01', 'prob-2016a-calc-02'],
     difficulty: 3,
     freqScore: 9
   },
@@ -111,7 +111,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 参数估计：矩估计、极大似然估计
 假设检验：Z检验、t检验、$\\chi^2$检验`,
     formulas: ['prob-f-11', 'prob-f-12', 'prob-f-13'],
-    examples: ['prob-2023a-single-05', 'prob-2023a-fill-05', 'prob-2023a-calc-04', 'prob-2023a-calc-05', 'prob-2023b-single-05', 'prob-2023b-single-06', 'prob-2024a-calc-02', 'prob-2024a-fill-01', 'prob-2016a-fill-02'],
+    examples: ['prob-2023a-single-05', 'prob-2023a-fill-05', 'prob-2023a-calc-04', 'prob-2023a-calc-05', 'prob-2023b-single-05', 'prob-2023b-single-06', 'prob-2024a-calc-02', 'prob-2024a-fill-01', 'prob-2016a-fill-02', 'prob-2015a-single-01', 'prob-2015a-single-02', 'prob-2015a-single-03', 'prob-2016a-single-01', 'prob-2016a-calc-01'],
     difficulty: 4,
     freqScore: 8
   },

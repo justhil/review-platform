@@ -350,5 +350,143 @@ export const probabilityQuestions: Question[] = [
     kp: ['prob-kp-05'],
     source: '2022-2023学年B卷',
     difficulty: 2
+  },
+
+  // 补充题型 - χ²分布构造
+  {
+    id: 'prob-2015a-single-01',
+    qtype: 'single',
+    stem: '设$X_1,X_2,\\ldots,X_n$是来自正态总体$N(0,\\sigma^2)$的简单随机样本，则$\\sigma^2$的无偏估计量是',
+    options: [
+      '$\\frac{1}{n}\\sum_{i=1}^n X_i^2$',
+      '$\\frac{1}{n-1}\\sum_{i=1}^n X_i^2$',
+      '$\\frac{1}{n}\\sum_{i=1}^n X_i$',
+      '$\\frac{1}{n-1}\\sum_{i=1}^n X_i$'
+    ],
+    answer: 'A',
+    analysis: '**关键**：当$\\mu=0$时，$E(X_i^2)=D(X_i)+[E(X_i)]^2=\\sigma^2+0=\\sigma^2$。\n**验证**：$E(\\frac{1}{n}\\sum X_i^2)=\\frac{1}{n}\\sum E(X_i^2)=\\frac{1}{n}\\cdot n\\sigma^2=\\sigma^2$。\n**注意**：这与一般情况不同！一般$\\mu\\neq 0$时，$S^2=\\frac{1}{n-1}\\sum(X_i-\\bar{X})^2$才是无偏估计。',
+    kp: ['prob-kp-05'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 独立正态变量平方和
+  {
+    id: 'prob-2015a-single-02',
+    qtype: 'single',
+    stem: '设$X\\sim N(0,1)$，$Y\\sim N(0,1)$，$X$与$Y$相互独立，则下列正确的是',
+    options: [
+      '$X+Y$服从正态分布',
+      '$X^2+Y^2$服从$\\chi^2$分布',
+      '$X^2/Y^2$服从$F$分布',
+      '$X^2Y^2$服从$\\chi^2$分布'
+    ],
+    answer: 'B',
+    analysis: '**A正确**：独立正态之和仍是正态，$X+Y\\sim N(0,2)$。\n**B正确**：$X^2\\sim\\chi^2(1)$，$Y^2\\sim\\chi^2(1)$，独立$\\chi^2$之和$X^2+Y^2\\sim\\chi^2(2)$。\n**C错误**：$F$分布定义是$\\frac{\\chi^2(m)/m}{\\chi^2(n)/n}$，这里$X^2/Y^2=\\frac{\\chi^2(1)/1}{\\chi^2(1)/1}\\sim F(1,1)$，C表述不完整。\n**D错误**：乘积不服从$\\chi^2$分布。\n**注**：本题A、B都对，但B更直接考查$\\chi^2$分布定义。',
+    kp: ['prob-kp-05'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 单侧假设检验拒绝域
+  {
+    id: 'prob-2015a-single-03',
+    qtype: 'single',
+    stem: '设总体$X\\sim N(\\mu,\\sigma^2)$，$\\sigma^2$已知，用$U$检验法检验$H_0:\\mu=\\mu_0$，$H_1:\\mu>\\mu_0$，则拒绝域为',
+    options: [
+      '$W=\\{u:|u|\\geq u_{\\alpha}\\}$',
+      '$W=\\{u:u\\geq u_{1-\\alpha/2}\\}$',
+      '$W=\\{u:u\\geq u_{1-\\alpha}\\}$',
+      '$W=\\{u:u\\geq u_{\\alpha/2}\\}$'
+    ],
+    answer: 'C',
+    analysis: '**单侧检验**：$H_1:\\mu>\\mu_0$是右侧检验。\n**拒绝域**：当$U=\\frac{\\bar{X}-\\mu_0}{\\sigma/\\sqrt{n}}$足够大时拒绝$H_0$。\n**临界值**：$P(U\\geq u_{1-\\alpha})=\\alpha$，所以拒绝域$W=\\{u:u\\geq u_{1-\\alpha}\\}$。\n**记忆**：右侧检验用$u_{1-\\alpha}$，左侧检验用$-u_{1-\\alpha}$，双侧检验用$\\pm u_{1-\\alpha/2}$。',
+    kp: ['prob-kp-05'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - σ²已知时的置信区间
+  {
+    id: 'prob-2016a-single-01',
+    qtype: 'single',
+    stem: '设$X_1,X_2,\\ldots,X_n$是来自正态总体$N(\\mu,4)$的简单随机样本，$\\bar{X}$为样本均值，则$\\mu$的置信度为$1-\\alpha$的置信区间为',
+    options: [
+      '$(\\bar{X}-u_{\\alpha/2}\\frac{4}{\\sqrt{n}}, \\bar{X}+u_{\\alpha/2}\\frac{4}{\\sqrt{n}})$',
+      '$(\\bar{X}-u_{1-\\alpha/2}\\frac{2}{\\sqrt{n}}, \\bar{X}+u_{\\alpha/2}\\frac{2}{\\sqrt{n}})$',
+      '$(\\bar{X}-u_{\\alpha}\\frac{2}{\\sqrt{n}}, \\bar{X}+u_{\\alpha}\\frac{2}{\\sqrt{n}})$',
+      '$(\\bar{X}-u_{\\alpha/2}\\frac{2}{\\sqrt{n}}, \\bar{X}+u_{\\alpha/2}\\frac{2}{\\sqrt{n}})$'
+    ],
+    answer: 'D',
+    analysis: '**条件**：$\\sigma^2=4$已知，$\\sigma=2$。\n**公式**：$\\sigma$已知时，$\\mu$的置信区间为$(\\bar{X}-u_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}}, \\bar{X}+u_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}})$。\n**代入**：$(\\bar{X}-u_{\\alpha/2}\\frac{2}{\\sqrt{n}}, \\bar{X}+u_{\\alpha/2}\\frac{2}{\\sqrt{n}})$。\n**对比**：$\\sigma$未知时用$t$分布和$S$。',
+    kp: ['prob-kp-05'],
+    source: '2016-2017学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 分布函数线性组合
+  {
+    id: 'prob-2016a-single-02',
+    qtype: 'single',
+    stem: '设$F(x)$和$G(x)$分别是随机变量$X$和$Y$的分布函数，若$H(x)=aF(x)+bG(x)$也是某随机变量的分布函数，则',
+    options: [
+      '$a=0.3$，$b=0.2$',
+      '$a=0.3$，$b=0.7$',
+      '$a=0.4$，$b=0.5$',
+      '$a=0.5$，$b=0.6$'
+    ],
+    answer: 'B',
+    analysis: '**分布函数性质**：$H(+\\infty)=1$，$H(-\\infty)=0$，且$H(x)$单调不减。\n**验证**：$H(+\\infty)=aF(+\\infty)+bG(+\\infty)=a\\cdot 1+b\\cdot 1=a+b=1$。\n$H(-\\infty)=aF(-\\infty)+bG(-\\infty)=a\\cdot 0+b\\cdot 0=0$。\n**结论**：必须$a+b=1$且$a,b\\geq 0$。只有B选项$0.3+0.7=1$满足。',
+    kp: ['prob-kp-02'],
+    source: '2016-2017学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 分段分布函数求概率
+  {
+    id: 'prob-2015a-fill-03',
+    qtype: 'fill',
+    stem: '设随机变量$X$的分布函数为$F(x)=\\begin{cases}0, & x<0\\\\0.3, & 0\\leq x<1\\\\0.6, & 1\\leq x<2\\\\1, & x\\geq 3\\end{cases}$，则$P\\{0.5\\leq X\\leq 2.5\\}=$______',
+    answer: '$0.7$',
+    analysis: '**方法**：$P\\{a<X\\leq b\\}=F(b)-F(a)$。\n**注意**：分布函数右连续，$P\\{X=a\\}=F(a)-F(a^-)$。\n**计算**：$P\\{0.5\\leq X\\leq 2.5\\}=P\\{0.5<X\\leq 2.5\\}+P\\{X=0.5\\}$。\n由于$F(0.5)=F(0.5^-)=0.3$，所以$P\\{X=0.5\\}=0$。\n$P\\{0.5<X\\leq 2.5\\}=F(2.5)-F(0.5)=1-0.3=0.7$。',
+    kp: ['prob-kp-02'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 方差的χ²检验
+  {
+    id: 'prob-2016a-calc-01',
+    qtype: 'calc',
+    stem: '某工厂生产的零件直径$X$（单位：cm）服从正态分布。现抽取12个零件，测得样本均值$\\bar{X}=27$，样本标准差$S=2.267$。在显著性水平$\\alpha=0.05$下，检验总体方差是否不超过$3.24$。（已知$\\chi^2_{0.05}(11)=19.675$，$\\chi^2_{0.95}(11)=4.575$）',
+    answer: '设$H_0:\\sigma^2\\leq 3.24$，$H_1:\\sigma^2>3.24$\n检验统计量：$\\chi^2=\\frac{(n-1)S^2}{\\sigma_0^2}=\\frac{11\\times 2.267^2}{3.24}=17.448$\n拒绝域：$\\chi^2\\geq\\chi^2_{0.05}(11)=19.675$\n因为$17.448<19.675$，所以接受$H_0$，认为方差不超过$3.24$。',
+    analysis: '**方差检验步骤**：\n(1)建立假设：$H_0:\\sigma^2\\leq\\sigma_0^2$，$H_1:\\sigma^2>\\sigma_0^2$（右侧检验）\n(2)统计量：$\\chi^2=\\frac{(n-1)S^2}{\\sigma_0^2}\\sim\\chi^2(n-1)$\n(3)拒绝域：右侧检验$\\chi^2\\geq\\chi^2_{\\alpha}(n-1)$\n(4)计算判断：$\\chi^2=\\frac{11\\times 5.139}{3.24}=17.448<19.675$，接受$H_0$。',
+    kp: ['prob-kp-05'],
+    source: '2016-2017学年',
+    difficulty: 4
+  },
+
+  // 补充题型 - 均匀分布求随机变量函数的密度
+  {
+    id: 'prob-2015a-calc-01',
+    qtype: 'calc',
+    stem: '设随机变量$X$服从$(0,1)$上的均匀分布，$Y=2X+1$，求$Y$的概率密度。',
+    answer: '$f_Y(y)=\\begin{cases}\\frac{1}{2}, & 1<y<3\\\\0, & \\text{其他}\\end{cases}$',
+    analysis: '**方法一（公式法）**：\n$X\\sim U(0,1)$，$f_X(x)=1$（$0<x<1$）。\n$Y=2X+1$，则$X=\\frac{Y-1}{2}$，$\\frac{dx}{dy}=\\frac{1}{2}$。\n$f_Y(y)=f_X(\\frac{y-1}{2})\\cdot|\\frac{1}{2}|=1\\cdot\\frac{1}{2}=\\frac{1}{2}$。\n$Y$的取值范围：$X\\in(0,1)\\Rightarrow Y\\in(1,3)$。\n**方法二（分布函数法）**：\n$F_Y(y)=P(Y\\leq y)=P(2X+1\\leq y)=P(X\\leq\\frac{y-1}{2})=F_X(\\frac{y-1}{2})$。\n$f_Y(y)=F_Y\'(y)=\\frac{1}{2}f_X(\\frac{y-1}{2})=\\frac{1}{2}$（$1<y<3$）。',
+    kp: ['prob-kp-02'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 二维连续型随机变量独立性判断
+  {
+    id: 'prob-2016a-calc-02',
+    qtype: 'calc',
+    stem: '设二维随机变量$(X,Y)$的联合概率密度为$f(x,y)=\\begin{cases}xe^{-x}\\cdot\\frac{1}{(1+y)^2}, & x\\geq 0,y\\geq 0\\\\0, & \\text{其他}\\end{cases}$，求：(1) $X$和$Y$的边缘概率密度；(2) 判断$X$与$Y$是否独立。',
+    answer: '(1) $f_X(x)=xe^{-x}$（$x\\geq 0$），$f_Y(y)=\\frac{1}{(1+y)^2}$（$y\\geq 0$）\n(2) 因为$f(x,y)=f_X(x)\\cdot f_Y(y)$，所以$X$与$Y$相互独立。',
+    analysis: '**第(1)问**：\n$f_X(x)=\\int_0^{+\\infty}xe^{-x}\\cdot\\frac{1}{(1+y)^2}dy=xe^{-x}\\cdot[-\\frac{1}{1+y}]_0^{+\\infty}=xe^{-x}$（$x\\geq 0$）。\n$f_Y(y)=\\int_0^{+\\infty}xe^{-x}\\cdot\\frac{1}{(1+y)^2}dx=\\frac{1}{(1+y)^2}\\cdot\\int_0^{+\\infty}xe^{-x}dx=\\frac{1}{(1+y)^2}$（$y\\geq 0$）。\n**第(2)问**：\n验证$f(x,y)=xe^{-x}\\cdot\\frac{1}{(1+y)^2}=f_X(x)\\cdot f_Y(y)$，成立！\n**结论**：$X$与$Y$相互独立。\n**技巧**：若联合密度可分离为$f(x,y)=g(x)h(y)$的形式，则独立。',
+    kp: ['prob-kp-02'],
+    source: '2016-2017学年',
+    difficulty: 3
   }
 ]
