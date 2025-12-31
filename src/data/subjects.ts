@@ -13,6 +13,13 @@ import {
   physicsBigQuestions,
   physicsBigQuestionImageGroups
 } from './physics'
+import {
+  probabilityQuestions,
+  probabilityKnowledgePoints,
+  probabilityFormulas,
+  probabilityBigQuestions,
+  probabilityBigQuestionImageGroups
+} from './probability'
 
 export const subjects: SubjectConfig[] = [
   {
@@ -78,7 +85,13 @@ const subjectDataMap: Record<string, SubjectData> = {
     bigQuestions: mechanicsBigQuestions,
     bigQuestionImageGroups: mechanicsBigQuestionImageGroups
   },
-  probability: { ...emptyData },
+  probability: {
+    questions: probabilityQuestions,
+    knowledgePoints: probabilityKnowledgePoints,
+    formulas: probabilityFormulas,
+    bigQuestions: probabilityBigQuestions,
+    bigQuestionImageGroups: probabilityBigQuestionImageGroups
+  },
 }
 
 export function getSubjectConfig(id: string): SubjectConfig | undefined {
