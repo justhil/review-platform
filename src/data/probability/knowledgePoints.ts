@@ -20,7 +20,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 
 事件独立性：$P(AB) = P(A)P(B)$`,
     formulas: ['prob-f-01', 'prob-f-02', 'prob-f-03'],
-    examples: [],
+    examples: ['prob-2023a-single-01', 'prob-2023a-single-02', 'prob-2023a-fill-01', 'prob-2023b-single-01', 'prob-2024a-calc-01', 'prob-2024b-calc-01'],
     difficulty: 2,
     freqScore: 9
   },
@@ -41,7 +41,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 
 分布函数：$F(x) = P(X \\leq x)$`,
     formulas: ['prob-f-04', 'prob-f-05', 'prob-f-06'],
-    examples: [],
+    examples: ['prob-2023a-single-03', 'prob-2023a-single-04', 'prob-2023a-fill-02', 'prob-2023a-fill-03', 'prob-2023a-calc-01', 'prob-2023a-calc-02', 'prob-2023a-calc-03', 'prob-2023b-single-02', 'prob-2023b-single-03', 'prob-2023b-single-04', 'prob-2016a-fill-01'],
     difficulty: 3,
     freqScore: 9
   },
@@ -66,7 +66,7 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 - $E(X+Y) = E(X)+E(Y)$
 - 若X,Y独立：$D(X+Y) = D(X)+D(Y)$`,
     formulas: ['prob-f-07', 'prob-f-08', 'prob-f-09'],
-    examples: [],
+    examples: ['prob-2023a-fill-04'],
     difficulty: 3,
     freqScore: 9
   },
@@ -111,8 +111,54 @@ export const probabilityKnowledgePoints: KnowledgePoint[] = [
 参数估计：矩估计、极大似然估计
 假设检验：Z检验、t检验、$\\chi^2$检验`,
     formulas: ['prob-f-11', 'prob-f-12', 'prob-f-13'],
-    examples: [],
+    examples: ['prob-2023a-single-05', 'prob-2023a-fill-05', 'prob-2023a-calc-04', 'prob-2023a-calc-05', 'prob-2023b-single-05', 'prob-2023b-single-06', 'prob-2024a-calc-02', 'prob-2024a-fill-01', 'prob-2016a-fill-02'],
     difficulty: 4,
     freqScore: 8
+  },
+  {
+    id: 'prob-kp-06',
+    title: '区间估计与假设检验',
+    chapter: '05',
+    types: ['fill', 'single', 'calc'],
+    body: `置信区间：
+- $\\sigma^2$已知：$\\bar{X} \\pm u_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}}$
+- $\\sigma^2$未知：$\\bar{X} \\pm t_{\\alpha/2}(n-1)\\frac{S}{\\sqrt{n}}$
+- 方差的置信区间：$\\left(\\frac{(n-1)S^2}{\\chi^2_{\\alpha/2}(n-1)}, \\frac{(n-1)S^2}{\\chi^2_{1-\\alpha/2}(n-1)}\\right)$
+
+假设检验：
+- 原假设$H_0$与备择假设$H_1$
+- 检验统计量的选取
+- 拒绝域的确定
+- 双侧检验：$W = \\{|统计量| \\geq 临界值\\}$
+- 单侧检验：$W = \\{统计量 \\geq 临界值\\}$或$W = \\{统计量 \\leq -临界值\\}$
+
+两类错误：
+- 第一类错误（弃真）：$\\alpha = P(拒绝H_0|H_0为真)$
+- 第二类错误（取伪）：$\\beta = P(接受H_0|H_0为假)$`,
+    formulas: ['prob-f-14', 'prob-f-15'],
+    examples: ['prob-2015a-single-05', 'prob-2015a-single-06', 'prob-2015a-calc-04', 'prob-2016a-calc-05'],
+    difficulty: 4,
+    freqScore: 8
+  },
+  {
+    id: 'prob-kp-07',
+    title: '一元线性回归',
+    chapter: '05',
+    types: ['calc'],
+    body: `回归模型：$Y = a + bX + \\varepsilon$，$\\varepsilon \\sim N(0, \\sigma^2)$
+
+最小二乘估计：
+- $\\hat{b} = \\frac{L_{xy}}{L_{xx}} = \\frac{\\sum(x_i-\\bar{x})(y_i-\\bar{y})}{\\sum(x_i-\\bar{x})^2}$
+- $\\hat{a} = \\bar{y} - \\hat{b}\\bar{x}$
+
+回归方程显著性检验：
+- $F = \\frac{SS_R/1}{SS_E/(n-2)} \\sim F(1, n-2)$
+- $SS_T = SS_R + SS_E$（总平方和 = 回归平方和 + 残差平方和）
+
+相关系数：$r = \\frac{L_{xy}}{\\sqrt{L_{xx}L_{yy}}}$`,
+    formulas: ['prob-f-16'],
+    examples: ['prob-2011a-calc-reg'],
+    difficulty: 4,
+    freqScore: 6
   }
 ]
