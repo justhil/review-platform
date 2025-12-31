@@ -77,3 +77,46 @@ useQuestions (hooks/useQuestions.ts) → 题目筛选
 - ECharts（图表）
 - KaTeX（LaTeX 渲染，题目 stem 中使用 `$...$` 包裹公式）
 - Canvas + Pointer Events（手写画板）
+
+## 部署
+
+### Vercel 推送
+
+由于 GitHub 不支持密码认证，使用 Personal Access Token 推送：
+
+```bash
+git push https://justhil:TOKEN@github.com/justhil/review-platform.git main
+```
+
+Token 生成：https://github.com/settings/tokens/new （勾选 repo 权限）
+
+### SPA 路由配置
+
+项目根目录已配置 `vercel.json`，解决刷新 404 问题：
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
+```
+
+## 题库资料
+
+历年试卷存放于 `资料/07-24概统试卷PDF/`，包含 2007-2024 年概率统计试卷。
+
+### 题库更新流程
+
+1. 读取历年试卷 PDF/DOC（使用 pdftotext 或 olefile）
+2. 对比现有题库，识别缺失题型
+3. 补充新题到 `src/data/{subject}/questions.ts`
+4. 更新知识点 examples 关联
+5. **重要**：确保 `src/data/subjects.ts` 中 `subjectDataMap` 正确导入数据（非 emptyData）
+6. 构建验证：`npm run build`
+7. 推送部署
+
+### 概率论题库现状（2024-12）
+
+已收录 28 道题目，覆盖：
+- 选择题：条件概率、分布函数性质、正态分布、抽样分布
+- 填空题：概率计算、置信区间、无偏估计量
+- 计算题：贝叶斯公式、全概率公式、假设检验、参数估计、边缘分布
