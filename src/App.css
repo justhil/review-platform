@@ -942,6 +942,9 @@ h3 {
 .overlay-canvas-container.drawing-mode {
   pointer-events: auto;
   cursor: crosshair;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .overlay-canvas {
@@ -950,6 +953,9 @@ h3 {
   left: 0;
   width: 100%;
   height: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .overlay-toolbar {
@@ -1462,6 +1468,34 @@ h3 {
 
   .overlay-tool-menu {
     right: 56px;
+  }
+
+  /* Mobile horizontal toolbar */
+  .overlay-canvas-container.mobile .overlay-toolbar {
+    flex-direction: row;
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    right: 50%;
+    transform: translateX(50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.5rem;
+    border-radius: 2rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    gap: 0.25rem;
+  }
+
+  .overlay-canvas-container.mobile .overlay-tool-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    box-shadow: none;
+  }
+
+  .overlay-canvas-container.mobile .overlay-tool-menu {
+    position: fixed;
+    bottom: calc(130px + env(safe-area-inset-bottom));
+    right: 50%;
+    transform: translateX(50%);
+    left: auto;
   }
 
   .exam-card {

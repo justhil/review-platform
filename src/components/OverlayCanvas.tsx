@@ -19,16 +19,20 @@ const BRUSH_SIZES = [2, 4, 6, 8, 12]
 const ERASER_SIZES = [10, 20, 30, 40]
 const MIN_DISTANCE = 1.5
 const PRESSURE_SMOOTHING = 0.3
+const MAX_HISTORY = 20
+const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
 export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, onToggleDrawing }: OverlayCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [color, setColor] = useState('#e74c3c')
-  const [brushSize, setBrushSize] = useState(4)
-  const [eraserSize, setEraserSize] = useState(20)
+  const [brushSize, setBrushSize] = useState(isMobile ? 6 : 4)
+  const [eraserSize, setEraserSize] = useState(isMobile ? 30 : 20)
   const [isEraser, setIsEraser] = useState(false)
   const [showToolbar, setShowToolbar] = useState(false)
+  const [canUndo, setCanUndo] = useState(false)
+  const [canRedo, setCanRedo] = useState(false)
 
   const pendingPointsRef = useRef<Point[]>([])
   const lastPointRef = useRef<Point | null>(null)
@@ -38,6 +42,9 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
   const rafRef = useRef<number | null>(null)
   const initializedRef = useRef(false)
   const canvasStateRef = useRef({ width: 0, height: 0, dpr: 1 })
+  const activePointersRef = useRef<Set<number>>(new Set())
+  const historyRef = useRef<ImageData[]>([])
+  const historyIndexRef = useRef(-1)
 
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current
@@ -79,6 +86,48 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
 
     canvasStateRef.current = { width, height, dpr }
   }, [])
+
+  const updateHistoryState = useCallback(() => {
+    setCanUndo(historyIndexRef.current > 0)
+    setCanRedo(historyIndexRef.current < historyRef.current.length - 1)
+  }, [])
+
+  const saveSnapshot = useCallback(() => {
+    const ctx = ctxRef.current
+    const canvas = canvasRef.current
+    if (!ctx || !canvas) return
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1)
+    historyRef.current.push(imageData)
+    if (historyRef.current.length > MAX_HISTORY) {
+      historyRef.current.shift()
+    } else {
+      historyIndexRef.current++
+    }
+    updateHistoryState()
+  }, [updateHistoryState])
+
+  const undo = useCallback(() => {
+    if (historyIndexRef.current <= 0) return
+    historyIndexRef.current--
+    const ctx = ctxRef.current
+    const canvas = canvasRef.current
+    if (!ctx || !canvas) return
+    const imageData = historyRef.current[historyIndexRef.current]
+    ctx.putImageData(imageData, 0, 0)
+    updateHistoryState()
+  }, [updateHistoryState])
+
+  const redo = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return
+    historyIndexRef.current++
+    const ctx = ctxRef.current
+    const canvas = canvasRef.current
+    if (!ctx || !canvas) return
+    const imageData = historyRef.current[historyIndexRef.current]
+    ctx.putImageData(imageData, 0, 0)
+    updateHistoryState()
+  }, [updateHistoryState])
 
   const getCanvasCoords = useCallback((e: PointerEvent | React.PointerEvent): Point => {
     const canvas = canvasRef.current
@@ -166,16 +215,24 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     if (disabled || !drawingEnabled) return
+
+    activePointersRef.current.add(e.pointerId)
+    if (activePointersRef.current.size > 1) {
+      isDrawingRef.current = false
+      return
+    }
+
     e.preventDefault()
     e.stopPropagation()
     e.currentTarget.setPointerCapture(e.pointerId)
 
+    saveSnapshot()
     smoothedPressureRef.current = 0.5
     const point = getCanvasCoords(e.nativeEvent)
     pendingPointsRef.current = [point]
     lastPointRef.current = point
     isDrawingRef.current = true
-  }, [disabled, drawingEnabled, getCanvasCoords])
+  }, [disabled, drawingEnabled, getCanvasCoords, saveSnapshot])
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDrawingRef.current || disabled || !drawingEnabled) return
@@ -199,6 +256,8 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
   }, [disabled, drawingEnabled, getCanvasCoords, shouldAddPoint, flushPendingPoints])
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
+    activePointersRef.current.delete(e.pointerId)
+
     if (!isDrawingRef.current) return
     e.currentTarget.releasePointerCapture(e.pointerId)
 
@@ -234,10 +293,11 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     const ctx = ctxRef.current
     const canvas = canvasRef.current
     if (!ctx || !canvas) return
+    saveSnapshot()
     const { width, height } = canvasStateRef.current
     ctx.clearRect(0, 0, width, height)
     scheduleSave()
-  }, [scheduleSave])
+  }, [scheduleSave, saveSnapshot])
 
   useEffect(() => {
     // 延迟初始化，确保容器尺寸已计算
@@ -284,8 +344,17 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     }
   }, [])
 
+  useEffect(() => {
+    if (!drawingEnabled) return
+    const prevent = (e: TouchEvent) => {
+      if (e.touches.length === 1) e.preventDefault()
+    }
+    document.addEventListener('touchmove', prevent, { passive: false })
+    return () => document.removeEventListener('touchmove', prevent)
+  }, [drawingEnabled])
+
   return (
-    <div className={`overlay-canvas-container ${drawingEnabled ? 'drawing-mode' : ''}`} ref={containerRef}>
+    <div className={`overlay-canvas-container ${drawingEnabled ? 'drawing-mode' : ''} ${isMobile ? 'mobile' : ''}`} ref={containerRef}>
       <canvas
         ref={canvasRef}
         className="overlay-canvas"
@@ -337,6 +406,8 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
             )}
 
             <button className={`overlay-tool-btn ${isEraser ? 'active' : ''}`} onClick={() => setIsEraser(!isEraser)} title="橡皮擦">🧹</button>
+            <button className="overlay-tool-btn" onClick={undo} disabled={disabled || !canUndo} title="撤销">↩️</button>
+            <button className="overlay-tool-btn" onClick={redo} disabled={disabled || !canRedo} title="重做">↪️</button>
             <button className="overlay-tool-btn" onClick={clearCanvas} disabled={disabled} title="清空手写">🗑️</button>
           </>
         )}
