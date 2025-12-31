@@ -5,7 +5,6 @@ import { Latex } from '../components/Latex'
 export function Formulas() {
   const { config, data } = useSubject()
   const [selectedChapter, setSelectedChapter] = useState<string | null>(null)
-  const [hiddenFormulas, setHiddenFormulas] = useState<Set<string>>(() => new Set(data.formulas.map(f => f.id)))
 
   const chapterMap = useMemo(() => {
     const map: Record<string, string> = {}
@@ -18,18 +17,6 @@ export function Formulas() {
     : data.formulas
 
   const kpMap = new Map(data.knowledgePoints.map(kp => [kp.id, kp.title]))
-
-  const toggleFormula = (id: string) => {
-    setHiddenFormulas(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  const showAll = () => setHiddenFormulas(new Set())
-  const hideAll = () => setHiddenFormulas(new Set(data.formulas.map(f => f.id)))
 
   return (
     <div className="formulas">
@@ -44,28 +31,23 @@ export function Formulas() {
         ))}
       </div>
 
-      <div className="mode-buttons">
-        <button className="btn" onClick={hideAll}>遮挡模式</button>
-        <button className="btn" onClick={showAll}>显示全部</button>
-      </div>
-
       <div className="formula-list">
         {filteredFormulas.map(f => (
-          <div key={f.id} className="formula-card" onClick={() => toggleFormula(f.id)}>
+          <div key={f.id} className="formula-card">
             <div className="formula-header">
+              <span className="formula-name">{f.mnemonic}</span>
               <span className="formula-chapter">{chapterMap[f.chapter]}</span>
-              <span className="formula-usage">{f.usage}</span>
             </div>
 
-            <div className={`formula-latex ${hiddenFormulas.has(f.id) ? 'hidden' : ''}`}>
-              {hiddenFormulas.has(f.id) ? '点击显示公式' : <Latex>{f.latex}</Latex>}
+            <div className="formula-latex">
+              <Latex>{f.latex}</Latex>
             </div>
 
-            {f.mnemonic && !hiddenFormulas.has(f.id) && (
-              <div className="formula-mnemonic">口诀：{f.mnemonic}</div>
+            {f.usage && (
+              <div className="formula-usage">{f.usage}</div>
             )}
 
-            {!hiddenFormulas.has(f.id) && f.kp.length > 0 && (
+            {f.kp.length > 0 && (
               <div className="formula-kps">
                 知识点：{f.kp.map(id => kpMap.get(id) || id).join('、')}
               </div>
