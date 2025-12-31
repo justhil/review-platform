@@ -366,6 +366,12 @@ h3 {
 .analysis {
   color: #666;
   margin-bottom: 0.75rem;
+  line-height: 1.8;
+}
+
+.analysis strong {
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .kp-tags {
