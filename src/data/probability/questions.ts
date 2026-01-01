@@ -488,5 +488,109 @@ export const probabilityQuestions: Question[] = [
     kp: ['prob-kp-02'],
     source: '2016-2017学年',
     difficulty: 3
+  },
+
+  // ========== 2016年试卷补充题型 ==========
+
+  // 补充题型 - 事件独立性判断
+  {
+    id: 'prob-2016a-single-03',
+    qtype: 'single',
+    stem: '设$A$、$B$为两个随机事件，$P(A)=0.4$，$P(B)=0.5$，$P(AB)=0.2$，则$A$与$B$',
+    options: [
+      '相互独立',
+      '互不相容',
+      '既不独立也不互不相容',
+      '条件不足，无法判断'
+    ],
+    answer: 'A',
+    analysis: '**独立性判断**：若$P(AB)=P(A)P(B)$则独立。\n**验证**：$P(A)P(B)=0.4\\times 0.5=0.2=P(AB)$，成立！\n**结论**：$A$与$B$相互独立。\n**注意**：互不相容要求$P(AB)=0$，这里$P(AB)=0.2\\neq 0$，所以不互不相容。',
+    kp: ['prob-kp-01'],
+    source: '2015-2016学年',
+    difficulty: 2
+  },
+
+  // 补充题型 - 协方差计算
+  {
+    id: 'prob-2016a-fill-03',
+    qtype: 'fill',
+    stem: '设随机变量$X$与$Y$满足$E(X)=1$，$E(Y)=2$，$D(X)=4$，$D(Y)=9$，$\\rho_{XY}=0.5$，则$Cov(X,Y)=$______',
+    answer: '$3$',
+    analysis: '**公式**：$\\rho_{XY}=\\frac{Cov(X,Y)}{\\sqrt{D(X)}\\sqrt{D(Y)}}$。\n**代入**：$0.5=\\frac{Cov(X,Y)}{\\sqrt{4}\\cdot\\sqrt{9}}=\\frac{Cov(X,Y)}{2\\times 3}=\\frac{Cov(X,Y)}{6}$。\n**解得**：$Cov(X,Y)=0.5\\times 6=3$。',
+    kp: ['prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 2
+  },
+
+  // 补充题型 - 协方差性质
+  {
+    id: 'prob-2016a-fill-04',
+    qtype: 'fill',
+    stem: '设$D(X)=2$，$D(Y)=3$，$Cov(X,Y)=1$，则$D(2X-Y)=$______',
+    answer: '$7$',
+    analysis: '**公式**：$D(aX+bY)=a^2D(X)+b^2D(Y)+2ab\\cdot Cov(X,Y)$。\n**代入**：这里$a=2,b=-1$。\n$D(2X-Y)=4D(X)+D(Y)+2\\times 2\\times(-1)\\times Cov(X,Y)$\n$=4\\times 2+3-4\\times 1=8+3-4=7$。\n**记忆**：方差的线性组合公式中，系数要平方，协方差项系数是$2ab$。',
+    kp: ['prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 二维正态分布性质
+  {
+    id: 'prob-2016a-single-04',
+    qtype: 'single',
+    stem: '设$(X,Y)$服从二维正态分布，下列结论错误的是',
+    options: [
+      '$X$与$Y$都服从正态分布',
+      '$aX+bY$服从正态分布（$a,b$为常数）',
+      '若$\\rho=0$，则$X$与$Y$相互独立',
+      '若$X$与$Y$都服从正态分布，则$(X,Y)$服从二维正态分布'
+    ],
+    answer: 'D',
+    analysis: '**A正确**：二维正态的边缘分布是一维正态。\n**B正确**：二维正态的线性组合仍是正态。\n**C正确**：对于二维正态分布，$\\rho=0$等价于独立（这是二维正态的特殊性质）。\n**D错误**：两个一维正态不一定构成二维正态！反例：$X\\sim N(0,1)$，$Y=X$当$|X|\\leq 1$，$Y=-X$当$|X|>1$，则$Y\\sim N(0,1)$但$(X,Y)$不是二维正态。',
+    kp: ['prob-kp-02', 'prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 3
+  },
+
+  // 补充题型 - 由协方差求期望
+  {
+    id: 'prob-2016a-fill-05',
+    qtype: 'fill',
+    stem: '设$E(X)=2$，$E(Y)=3$，$E(XY)=8$，则$Cov(X,Y)=$______',
+    answer: '$2$',
+    analysis: '**公式**：$Cov(X,Y)=E(XY)-E(X)E(Y)$。\n**代入**：$Cov(X,Y)=8-2\\times 3=8-6=2$。\n**记忆**：协方差=乘积期望-期望乘积。',
+    kp: ['prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 2
+  },
+
+  // 补充题型 - 离散型随机变量期望（分布律）
+  {
+    id: 'prob-2016a-fill-06',
+    qtype: 'fill',
+    stem: '设随机变量$X$的分布律为$P\\{X=k\\}=\\frac{k}{6}$，$k=1,2,3$，则$E(X)=$______',
+    answer: '$\\frac{7}{3}$',
+    analysis: '**公式**：$E(X)=\\sum_k k\\cdot P(X=k)$。\n**计算**：$E(X)=1\\times\\frac{1}{6}+2\\times\\frac{2}{6}+3\\times\\frac{3}{6}=\\frac{1+4+9}{6}=\\frac{14}{6}=\\frac{7}{3}$。\n**验证概率和**：$\\frac{1}{6}+\\frac{2}{6}+\\frac{3}{6}=1$ ✓',
+    kp: ['prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 2
+  },
+
+  // 补充题型 - 相关系数性质
+  {
+    id: 'prob-2016a-single-05',
+    qtype: 'single',
+    stem: '设随机变量$X$与$Y$的相关系数$\\rho_{XY}=-1$，则',
+    options: [
+      '$Y=X$',
+      '$Y=-X$',
+      '$Y=aX+b$，其中$a<0$',
+      '$Y=aX+b$，其中$a>0$'
+    ],
+    answer: 'C',
+    analysis: '**相关系数性质**：$|\\rho_{XY}|=1$当且仅当$Y$与$X$存在线性关系$Y=aX+b$。\n**符号判断**：$\\rho_{XY}=-1$说明$a<0$（负相关）；$\\rho_{XY}=1$说明$a>0$（正相关）。\n**注意**：B选项$Y=-X$是特例，但不是唯一可能，C更一般。',
+    kp: ['prob-kp-03'],
+    source: '2015-2016学年',
+    difficulty: 2
   }
 ]

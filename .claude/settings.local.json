@@ -14,7 +14,17 @@
       "Skill(pdf-processing-pro)",
       "Bash(pdftotext:*)",
       "Bash(npm run build)",
-      "mcp__sequentialthinking__sequentialthinking"
+      "mcp__sequentialthinking__sequentialthinking",
+      "Bash(Remove-Item -Path \"D:\\\\AAai\\\\review-platform\\\\server.ts\" -Force)",
+      "Bash(Remove-Item -Path \"D:\\\\AAai\\\\review-platform\\\\deno.json\" -Force)",
+      "Bash(rm:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(findstr:*)",
+      "Bash(Where-Object { $_Name -match \"题库|exam|paper|test\" })",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []
