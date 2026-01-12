@@ -20,6 +20,13 @@ import {
   probabilityBigQuestions,
   probabilityBigQuestionImageGroups
 } from './probability'
+import {
+  englishQuestions,
+  englishKnowledgePoints,
+  englishFormulas,
+  englishBigQuestions,
+  englishBigQuestionImageGroups
+} from './english'
 
 export const subjects: SubjectConfig[] = [
   {
@@ -59,6 +66,21 @@ export const subjects: SubjectConfig[] = [
       { id: '04', name: '大数定律' },
       { id: '05', name: '数理统计' },
     ]
+  },
+  {
+    id: 'english',
+    name: '大学英语',
+    chapters: [
+      { id: '01', name: 'Unit 1' },
+      { id: '02', name: 'Unit 2' },
+      { id: '05', name: 'Unit 5' },
+      { id: '06', name: 'Unit 6' },
+      { id: '07', name: 'Unit 7' },
+      { id: '08', name: 'Unit 8' },
+      { id: '09', name: '阅读理解' },
+      { id: '10', name: '听力理解' },
+      { id: '11', name: '翻译' },
+    ]
   }
 ]
 
@@ -91,6 +113,13 @@ const subjectDataMap: Record<string, SubjectData> = {
     formulas: probabilityFormulas,
     bigQuestions: probabilityBigQuestions,
     bigQuestionImageGroups: probabilityBigQuestionImageGroups
+  },
+  english: {
+    questions: englishQuestions,
+    knowledgePoints: englishKnowledgePoints,
+    formulas: englishFormulas,
+    bigQuestions: englishBigQuestions,
+    bigQuestionImageGroups: englishBigQuestionImageGroups
   },
 }
 
