@@ -286,11 +286,6 @@ export function Practice() {
             </div>
           )}
 
-          <div className="inline-nav">
-            <button className="btn" onClick={handlePrev} disabled={currentIndex === 0}>← 上一题</button>
-            <button className="btn" onClick={handleNext} disabled={currentIndex === displayQuestions.length - 1}>下一题 →</button>
-          </div>
-
           <div className="mastery-buttons">
             <span>自评：</span>
             <button className="btn known" onClick={() => handleMastery('known')}>会</button>
@@ -299,6 +294,12 @@ export function Practice() {
           </div>
         </div>
       </div>
+
+      <nav className="question-nav-dock" aria-label="题目切换">
+        <button type="button" className="btn question-nav-btn" onClick={handlePrev} disabled={currentIndex === 0}>← 上一题</button>
+        <span className="question-nav-progress">{currentIndex + 1} / {displayQuestions.length}</span>
+        <button type="button" className="btn primary question-nav-btn" onClick={handleNext} disabled={currentIndex === displayQuestions.length - 1}>下一题 →</button>
+      </nav>
 
       <OverlayCanvas
         key={currentQ.id}

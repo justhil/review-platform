@@ -377,10 +377,6 @@ export function ExamTake() {
                 </div>
               )}
 
-              <div className="inline-nav">
-                <button className="btn" onClick={handlePrev} disabled={currentIndex === 0}>← 上一题</button>
-                <button className="btn" onClick={handleNext} disabled={currentIndex === examQuestions.length - 1}>下一题 →</button>
-              </div>
             </div>
           </div>
 
@@ -398,11 +394,14 @@ export function ExamTake() {
         />
       )}
 
-      <div className="exam-nav">
-        <button className="btn" onClick={handlePrev} disabled={currentIndex === 0}>上一题</button>
-        <button className="btn" onClick={handleNext} disabled={currentIndex === examQuestions.length - 1}>下一题</button>
-        <button className="btn" onClick={() => navigate(`/${subjectId}/exams`)}>返回列表</button>
-      </div>
+      {currentQ && (
+        <nav className="question-nav-dock" aria-label="题目切换">
+          <button type="button" className="btn question-nav-btn" onClick={handlePrev} disabled={currentIndex === 0}>← 上一题</button>
+          <span className="question-nav-progress">{currentIndex + 1} / {examQuestions.length}</span>
+          <button type="button" className="btn primary question-nav-btn" onClick={handleNext} disabled={currentIndex === examQuestions.length - 1}>下一题 →</button>
+          <button type="button" className="btn question-nav-back" onClick={() => navigate(`/${subjectId}/exams`)}>返回</button>
+        </nav>
+      )}
 
       {showConfirmFinish && (
         <div className="modal-overlay" onClick={() => setShowConfirmFinish(false)}>

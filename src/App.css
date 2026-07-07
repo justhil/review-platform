@@ -413,6 +413,75 @@ h3 {
   border-bottom: 1px solid #eee;
 }
 
+/* 固定底栏：上一题 / 下一题 */
+.question-nav-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 96;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.65rem 1rem;
+  padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.08);
+}
+
+.exam-take-fullscreen .question-nav-dock {
+  grid-template-columns: 1fr auto 1fr auto;
+}
+
+.question-nav-btn {
+  min-height: 44px;
+  justify-self: stretch;
+}
+
+.question-nav-btn:first-of-type {
+  justify-self: start;
+}
+
+.question-nav-btn.primary {
+  justify-self: end;
+}
+
+.question-nav-progress {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.question-nav-back {
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  justify-self: end;
+}
+
+.practice,
+.exam-take-fullscreen {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.practice .ink-fab-stack,
+.exam-take-fullscreen .ink-fab-stack {
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+}
+
+.practice .ink-mode-hint,
+.exam-take-fullscreen .ink-mode-hint {
+  bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
+}
+
 /* Question Header Row */
 .question-header-row {
   display: flex;
@@ -1779,6 +1848,20 @@ h3 {
   /* Practice Mobile */
   .practice {
     padding: 0;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .question-nav-dock {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .exam-take-fullscreen .question-nav-back {
+    display: none;
+  }
+
+  .exam-take-fullscreen .question-nav-dock {
+    grid-template-columns: 1fr auto 1fr;
   }
 
   .practice-content-wrapper {
