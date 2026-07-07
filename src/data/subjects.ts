@@ -27,6 +27,13 @@ import {
   englishBigQuestions,
   englishBigQuestionImageGroups
 } from './english'
+import {
+  materialMechanicsQuestions,
+  materialMechanicsKnowledgePoints,
+  materialMechanicsFormulas,
+  materialMechanicsBigQuestions,
+  materialMechanicsBigQuestionImageGroups
+} from './materialMechanics'
 
 export const subjects: SubjectConfig[] = [
   {
@@ -65,6 +72,18 @@ export const subjects: SubjectConfig[] = [
       { id: '03', name: '数字特征' },
       { id: '04', name: '大数定律' },
       { id: '05', name: '数理统计' },
+    ]
+  },
+  {
+    id: 'material-mechanics',
+    name: '材料力学',
+    chapters: [
+      { id: '01', name: '基本概念与拉压' },
+      { id: '02', name: '扭转' },
+      { id: '03', name: '截面几何性质' },
+      { id: '04', name: '弯曲' },
+      { id: '06', name: '应力状态与强度理论' },
+      { id: '08', name: '压杆稳定' },
     ]
   },
   {
@@ -120,6 +139,13 @@ const subjectDataMap: Record<string, SubjectData> = {
     formulas: englishFormulas,
     bigQuestions: englishBigQuestions,
     bigQuestionImageGroups: englishBigQuestionImageGroups
+  },
+  'material-mechanics': {
+    questions: materialMechanicsQuestions,
+    knowledgePoints: materialMechanicsKnowledgePoints,
+    formulas: materialMechanicsFormulas,
+    bigQuestions: materialMechanicsBigQuestions,
+    bigQuestionImageGroups: materialMechanicsBigQuestionImageGroups
   },
 }
 

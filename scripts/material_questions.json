@@ -1,0 +1,293 @@
+[
+  {
+    "id": "mat-p1-single-05",
+    "qtype": "single",
+    "stem": "梁在集中力作用的截面处，内力图()。",
+    "options": [
+      "剪力图有突变，弯矩图光滑连接；",
+      "剪力图有突变，弯矩图有转折；",
+      "剪力图光滑连接，弯矩图有突变；",
+      "剪力图有转折，弯矩图有突变。"
+    ],
+    "answer": "B",
+    "kp": [
+      "mat-kp-04"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-single-06",
+    "qtype": "single",
+    "stem": "某二向应力状态单元体的应力圆如图所示，则单元体内最大切应力为()。",
+    "options": [
+      "\\sigma 1",
+      "\\sigma  2",
+      "1 (\\sigma 1 \\sigma  2 ) 2",
+      "1 (\\sigma 1  \\sigma  2 ) 2"
+    ],
+    "answer": "C",
+    "kp": [
+      "mat-kp-06"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-single-07",
+    "qtype": "single",
+    "stem": "梁发生纯弯曲时，其横截面绕()旋转。",
+    "options": [
+      "梁的轴线；",
+      "截面对称轴；",
+      "中性轴；",
+      "截面形心"
+    ],
+    "answer": "C",
+    "kp": [
+      "mat-kp-04"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-single-08",
+    "qtype": "single",
+    "stem": "阶梯圆轴的最大切应力发生在()。",
+    "options": [
+      "扭矩最大的截面；",
+      "直径最大的截面；",
+      "直径最小的截面；",
+      "不能确定。"
+    ],
+    "answer": "D",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-single-09",
+    "qtype": "single",
+    "stem": "单位长度的扭转角 与()无关。",
+    "options": [
+      "杆的长度",
+      "扭矩",
+      "材料性质",
+      "截面几何性质"
+    ],
+    "answer": "A",
+    "kp": [
+      "mat-kp-02"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-single-10",
+    "qtype": "single",
+    "stem": "图示四根压杆的材料、截面均相同，它们 失 稳的先后次序为()。",
+    "options": [
+      "(a),(b),(c),(d)",
+      "(d),(a),(b),(c)",
+      "(c),(d),(a),(b)",
+      "(b),(c),(d),(a)"
+    ],
+    "answer": "A",
+    "kp": [
+      "mat-kp-08"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-01",
+    "qtype": "fill",
+    "stem": "工程上，须保证构件在外力作用下正常工作而不发生失效，即保证构件具有足够______",
+    "answer": "强度、刚度、稳定性",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-02",
+    "qtype": "fill",
+    "stem": "切应力等于零的平面叫主平面，主平面上的正应力叫______",
+    "answer": "主应力",
+    "kp": [
+      "mat-kp-06"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-03",
+    "qtype": "fill",
+    "stem": "工程上，通常按伸长率的大小把材料分成两大类，伸长率大于______",
+    "answer": "5%",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-04",
+    "qtype": "fill",
+    "stem": "两端受扭的实心圆轴，若将轴的直径变为原来的一半，其它条件不变，则轴内的最大______",
+    "answer": "8",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-05",
+    "qtype": "fill",
+    "stem": "矩形截面梁受弯曲变形，如果梁横截面的高度增加一倍时，梁的最大正应力变为原来______",
+    "answer": "0.25",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-06",
+    "qtype": "fill",
+    "stem": "正方形截面的低碳钢受拉直杆，其轴力为 2. 5kN，若许用应力为 100MPa，则此杆的______",
+    "answer": "5",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-07",
+    "qtype": "fill",
+    "stem": "长为 2m 的等截面直杆受到 10kN 的轴向拉力，已知杆的横截面面积为 100mm2、材料______",
+    "answer": "1",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p1-fill-08",
+    "qtype": "fill",
+    "stem": "压杆从稳定平衡状态过渡到不稳定平衡状态，载荷的临界值称为______",
+    "answer": "临界压力",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷1",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-01",
+    "qtype": "single",
+    "stem": "图中应力圆 a、b、c 表示的应力状态分别为是()。",
+    "options": [
+      "二向应力状态、纯剪切应力状态、三向应力状态；",
+      "单向拉应力状态、单向压应力状态、三向应力状态；",
+      "单向压应力状态、纯剪切应力状态、单向拉应力状态；",
+      "单向拉应力状态、单向压应力状态、纯剪切应力状态。"
+    ],
+    "answer": "C",
+    "kp": [
+      "mat-kp-06"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-02",
+    "qtype": "single",
+    "stem": "图示变截面圆轴，截面内力正确的是()。",
+    "options": [
+      "T1=3N.m，T2=T3=2N.m",
+      ".T1=3N.m，T2=T3=-2N.m",
+      ".T1=-3N.m，T2=T3=-2N.m",
+      "T1=3N.m，T2=T3=5N.m"
+    ],
+    "answer": "B",
+    "kp": [
+      "mat-kp-03"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-03",
+    "qtype": "single",
+    "stem": "下面有关强度理论知识的几个论述，正确的是()。",
+    "options": [
+      "需模拟实际应力状态逐一进行试验，确定极限应力；",
+      "无需进行试验，只需关于材料破坏原因的假说；",
+      "需要进行某些简单试验，无需关于材料破坏原因的假说；"
+    ],
+    "answer": "D",
+    "kp": [
+      "mat-kp-06"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-04",
+    "qtype": "single",
+    "stem": "右图所示悬臂梁，在用积分法计算时，需要确定积 分常数，下列方法和条件那个是最合适的()。",
+    "options": [
+      "由于是变截面梁，不能用积分法求解",
+      "杆件分成一段，2 个边界条件求积分常数。",
+      "杆件分成两段，2 个边界条件和 2 个光滑连续性条件求积分常数。",
+      "杆件分成 2 段，1 个边界条件和 1 个光滑连续条件求积分常数。"
+    ],
+    "answer": "C",
+    "kp": [
+      "mat-kp-04"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-05",
+    "qtype": "single",
+    "stem": "下列关于主平面的叙述中，正确的是()。",
+    "options": [
+      "主平面上的切应力为零；",
+      "主平面上的切应力最大；",
+      "主平面上的正应力为零；",
+      "主平面上的正应力最大。"
+    ],
+    "answer": "A",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  },
+  {
+    "id": "mat-p4-single-06",
+    "qtype": "single",
+    "stem": "决定杆件柔度的因素()。",
+    "options": [
+      "约束、截面形状、弹性模量；",
+      "约束、杆长、弹性模量；",
+      "约束、杆长、截面形状；",
+      "长度、截面形状、弹性模量。"
+    ],
+    "answer": "B",
+    "kp": [
+      "mat-kp-01"
+    ],
+    "source": "材料力学试卷4",
+    "difficulty": 2
+  }
+]
