@@ -934,14 +934,11 @@ h3 {
   z-index: 1;
 }
 
-/* Overlay Canvas */
+/* Overlay Canvas — 全页视口 */
 .overlay-canvas-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
+  position: fixed;
+  inset: 0;
+  z-index: 88;
   pointer-events: none;
 }
 
@@ -1239,20 +1236,15 @@ h3 {
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Drawing mode indicator */
-.exam-content-wrapper.drawing-active::before,
-.practice-content-wrapper.drawing-active::before {
+/* Drawing mode — 整页轻提示（导航 z-index 100 仍可点） */
+.practice.drawing-active::after,
+.exam-take-fullscreen.drawing-active::after {
   content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid rgba(52, 152, 219, 0.55);
-  border-radius: 12px;
+  position: fixed;
+  inset: 0;
   pointer-events: none;
-  z-index: 5;
-  box-shadow: inset 0 0 0 1px rgba(52, 152, 219, 0.15);
+  z-index: 87;
+  box-shadow: inset 0 0 0 2px rgba(52, 152, 219, 0.35);
   animation: ink-border-breathe 2.5s ease-in-out infinite;
 }
 

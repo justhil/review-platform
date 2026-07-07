@@ -216,7 +216,7 @@ export function ExamTake() {
   }, [examQuestions, answers])
 
   return (
-    <div className="exam-take-fullscreen">
+    <div className={`exam-take-fullscreen ${drawingEnabled ? 'drawing-active' : ''}`}>
       <div className="exam-header">
         <h1>{exam.title}</h1>
         <div className="exam-timer-bar">
@@ -245,7 +245,7 @@ export function ExamTake() {
       </div>
 
       {currentQ && (
-        <div className={`exam-content-wrapper ${drawingEnabled ? 'drawing-active' : ''}`}>
+        <div className="exam-content-wrapper">
           <div className="exam-content">
             <div className="question-card">
               <div className="question-header-row">
@@ -384,8 +384,18 @@ export function ExamTake() {
             </div>
           </div>
 
-          <OverlayCanvas key={currentQ.id} initialData={exam.drawings[currentQ.id]} onSave={handleSaveDrawing} disabled={isFinished} drawingEnabled={drawingEnabled} onToggleDrawing={() => setDrawingEnabled(!drawingEnabled)} />
         </div>
+      )}
+
+      {currentQ && (
+        <OverlayCanvas
+          key={currentQ.id}
+          initialData={exam.drawings[currentQ.id]}
+          onSave={handleSaveDrawing}
+          disabled={isFinished}
+          drawingEnabled={drawingEnabled}
+          onToggleDrawing={() => setDrawingEnabled(!drawingEnabled)}
+        />
       )}
 
       <div className="exam-nav">

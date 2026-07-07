@@ -151,7 +151,7 @@ export function Practice() {
   const isCurrentFav = currentQ && isFavorite(currentQ.id)
 
   return (
-    <div className="practice">
+    <div className={`practice ${drawingEnabled ? 'drawing-active' : ''}`}>
       <h1>{config.name} - 题库训练</h1>
 
       <div className="filter-bar">
@@ -180,7 +180,7 @@ export function Practice() {
         </div>
       )}
 
-      <div className={`practice-content-wrapper ${drawingEnabled ? 'drawing-active' : ''}`}>
+      <div className="practice-content-wrapper">
         <div className="question-card">
           <div className="question-header-row">
             <div className="question-type">{TYPE_LABELS[currentQ.qtype]}</div>
@@ -298,15 +298,15 @@ export function Practice() {
             <button className="btn unknown" onClick={() => handleMastery('unknown')}>不会</button>
           </div>
         </div>
-
-        <OverlayCanvas
-          key={currentQ.id}
-          initialData={drawings[currentQ.id]}
-          onSave={handleSaveDrawing}
-          drawingEnabled={drawingEnabled}
-          onToggleDrawing={() => setDrawingEnabled(!drawingEnabled)}
-        />
       </div>
+
+      <OverlayCanvas
+        key={currentQ.id}
+        initialData={drawings[currentQ.id]}
+        onSave={handleSaveDrawing}
+        drawingEnabled={drawingEnabled}
+        onToggleDrawing={() => setDrawingEnabled(!drawingEnabled)}
+      />
     </div>
   )
 }

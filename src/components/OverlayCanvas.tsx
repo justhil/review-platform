@@ -77,10 +77,9 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     const container = containerRef.current
     if (!canvas || !container) return
 
-    const rect = container.getBoundingClientRect()
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const width = Math.round(rect.width)
-    const height = Math.round(rect.height)
+    const width = Math.round(window.innerWidth)
+    const height = Math.round(window.innerHeight)
 
     const state = canvasStateRef.current
     if (state.width === width && state.height === height && state.dpr === dpr) return
