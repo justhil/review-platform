@@ -148,6 +148,15 @@ export function Practice() {
     setShowAnswer(true)
   }
 
+  const swipeNav = useSwipeQuestionNav({
+    onPrev: handlePrev,
+    onNext: handleNext,
+    drawingEnabled,
+    enabled: displayQuestions.length > 0,
+  })
+
+  const emptyTypeLabel = typeFilter ? TYPE_LABELS[typeFilter] ?? '该题型' : null
+
   if (displayQuestions.length === 0) {
     return (
       <div className="practice">
@@ -159,19 +168,24 @@ export function Practice() {
           ))}
           <button className={favOnly ? 'btn active fav-btn' : 'btn fav-btn'} onClick={handleFavFilter}>★ 收藏</button>
         </div>
-        <p className="empty-hint">{favOnly ? '暂无收藏题目' : '暂无题目'}</p>
+        <p className="empty-hint">
+          {favOnly
+            ? '暂无收藏题目'
+            : emptyTypeLabel
+              ? `本科目暂无「${emptyTypeLabel}」`
+              : '暂无题目'}
+        </p>
+        {emptyTypeLabel && !favOnly && (
+          <p style={{ marginTop: '0.75rem' }}>
+            <button type="button" className="btn" onClick={() => handleTypeChange('all')}>查看全部题型</button>
+          </p>
+        )}
       </div>
     )
   }
 
   const isCurrentFav = currentQ && isFavorite(currentQ.id)
   const answerVisible = revealAllAnswers || showAnswer
-
-  const swipeNav = useSwipeQuestionNav({
-    onPrev: handlePrev,
-    onNext: handleNext,
-    drawingEnabled,
-  })
 
   if (!currentQ) {
     return (
