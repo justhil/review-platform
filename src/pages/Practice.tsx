@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { useSwipeQuestionNav } from '../hooks/useSwipeQuestionNav'
 import { useSubject } from '../context/SubjectContext'
@@ -47,7 +47,17 @@ export function Practice() {
     return filteredQuestions.filter(q => (progress.favorites || []).includes(q.id))
   }, [filteredQuestions, favOnly, progress.favorites])
 
-  const currentQ = displayQuestions[currentIndex]
+  useEffect(() => {
+    if (displayQuestions.length === 0) {
+      setCurrentIndex(0)
+      return
+    }
+    setCurrentIndex(i => (i >= displayQuestions.length ? displayQuestions.length - 1 : i))
+  }, [displayQuestions.length, favOnly, typeFilter])
+
+  const safeIndex =
+    displayQuestions.length === 0 ? 0 : Math.min(currentIndex, displayQuestions.length - 1)
+  const currentQ = displayQuestions[safeIndex]
   const currentProgress = currentQ ? progress.question[currentQ.id] : undefined
 
   const kpMap = useMemo(() => {
@@ -163,6 +173,15 @@ export function Practice() {
     drawingEnabled,
   })
 
+  if (!currentQ) {
+    return (
+      <div className="practice">
+        <h1>{config.name} - 题库训练</h1>
+        <p className="empty-hint">题目加载异常，请切换筛选或刷新页面</p>
+      </div>
+    )
+  }
+
   return (
     <div className={`practice ${drawingEnabled ? 'drawing-active' : ''}`}>
       <h1>{config.name} - 题库训练</h1>
@@ -183,7 +202,7 @@ export function Practice() {
       </div>
 
       <div className="progress-bar">
-        <span>{currentIndex + 1} / {displayQuestions.length}</span>
+        <span>{safeIndex + 1} / {displayQuestions.length}</span>
         {currentProgress && <span className={`state-badge ${currentProgress.state}`}>{currentProgress.state === 'known' ? '会' : currentProgress.state === 'unsure' ? '不熟' : '不会'}</span>}
       </div>
 
@@ -321,9 +340,9 @@ export function Practice() {
       </div>
 
       <nav className="question-nav-dock" aria-label="题目切换">
-        <button type="button" className="btn question-nav-btn" onClick={handlePrev} disabled={currentIndex === 0}>← 上一题</button>
-        <span className="question-nav-progress">{currentIndex + 1} / {displayQuestions.length}</span>
-        <button type="button" className="btn primary question-nav-btn" onClick={handleNext} disabled={currentIndex === displayQuestions.length - 1}>下一题 →</button>
+        <button type="button" className="btn question-nav-btn" onClick={handlePrev} disabled={safeIndex === 0}>← 上一题</button>
+        <span className="question-nav-progress">{safeIndex + 1} / {displayQuestions.length}</span>
+        <button type="button" className="btn primary question-nav-btn" onClick={handleNext} disabled={safeIndex === displayQuestions.length - 1}>下一题 →</button>
       </nav>
 
       <OverlayCanvas
