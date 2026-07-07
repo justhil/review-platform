@@ -4,6 +4,7 @@ import { useSubject } from '../context/SubjectContext'
 import { useExams } from '../hooks/useExams'
 import { useProgress } from '../hooks/useProgress'
 import { OverlayCanvas } from '../components/OverlayCanvas'
+import { useSwipeQuestionNav } from '../hooks/useSwipeQuestionNav'
 import { Latex, MixedLatex } from '../components/Latex'
 import type { Question, QuestionType, MasteryState, ID } from '../types'
 
@@ -126,23 +127,30 @@ export function ExamTake() {
     saveDrawing(exam.id, currentQ.id, dataUrl)
   }, [exam, currentQ, saveDrawing])
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(i => i - 1)
       setShowAnswer(false)
       setShowFormulas(false)
       setShowKpDetail(null)
     }
-  }
+  }, [currentIndex])
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < examQuestions.length - 1) {
       setCurrentIndex(i => i + 1)
       setShowAnswer(false)
       setShowFormulas(false)
       setShowKpDetail(null)
     }
-  }
+  }, [currentIndex, examQuestions.length])
+
+  const swipeNav = useSwipeQuestionNav({
+    onPrev: handlePrev,
+    onNext: handleNext,
+    drawingEnabled,
+    enabled: !!currentQ && !showConfirmFinish && !showResult,
+  })
 
   const handleAnswerChange = (value: string) => {
     if (!currentQ) return
@@ -245,7 +253,12 @@ export function ExamTake() {
       </div>
 
       {currentQ && (
-        <div className="exam-content-wrapper">
+        <div
+          className="exam-content-wrapper swipe-question-area"
+          onTouchStart={swipeNav.onTouchStart}
+          onTouchEnd={swipeNav.onTouchEnd}
+          onTouchCancel={swipeNav.onTouchCancel}
+        >
           <div className="exam-content">
             <div className="question-card">
               <div className="question-header-row">

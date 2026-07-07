@@ -460,6 +460,16 @@ h3 {
   white-space: nowrap;
 }
 
+.reveal-answers-btn.active {
+  background: #8e44ad;
+  border-color: #8e44ad;
+  color: #fff;
+}
+
+.swipe-question-area {
+  touch-action: pan-y;
+}
+
 .question-nav-back {
   min-height: 44px;
   padding: 0.5rem 0.85rem;

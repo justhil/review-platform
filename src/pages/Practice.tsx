@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { useSwipeQuestionNav } from '../hooks/useSwipeQuestionNav'
 import { useSubject } from '../context/SubjectContext'
 import { useProgress } from '../hooks/useProgress'
 import { useQuestions } from '../hooks/useQuestions'
@@ -30,6 +31,7 @@ export function Practice() {
   const [drawingEnabled, setDrawingEnabled] = useState(false)
   const [drawings, setDrawings] = useState<Record<string, string>>({})
   const [showComplete, setShowComplete] = useState(false)
+  const [revealAllAnswers, setRevealAllAnswers] = useState(false)
 
   const handleSaveDrawing = (dataUrl: string) => {
     if (!currentQ) return
@@ -86,17 +88,19 @@ export function Practice() {
 
   const handleShowAnswer = () => setShowAnswer(true)
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentIndex < displayQuestions.length - 1) {
       setCurrentIndex(i => i + 1)
-      setShowAnswer(false)
-      setSelectedOption(null)
+      if (!revealAllAnswers) {
+        setShowAnswer(false)
+        setSelectedOption(null)
+      }
       setShowFormulas(false)
       setShowKpDetail(null)
     } else {
       setShowComplete(true)
     }
-  }
+  }, [currentIndex, displayQuestions.length, revealAllAnswers])
 
   const handleRestart = () => {
     setCurrentIndex(0)
@@ -105,15 +109,17 @@ export function Practice() {
     setShowComplete(false)
   }
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex(i => i - 1)
-      setShowAnswer(false)
-      setSelectedOption(null)
+      if (!revealAllAnswers) {
+        setShowAnswer(false)
+        setSelectedOption(null)
+      }
       setShowFormulas(false)
       setShowKpDetail(null)
     }
-  }
+  }, [currentIndex, revealAllAnswers])
 
   const handleMastery = (state: MasteryState) => {
     if (!currentQ) return
@@ -149,6 +155,13 @@ export function Practice() {
   }
 
   const isCurrentFav = currentQ && isFavorite(currentQ.id)
+  const answerVisible = revealAllAnswers || showAnswer
+
+  const swipeNav = useSwipeQuestionNav({
+    onPrev: handlePrev,
+    onNext: handleNext,
+    drawingEnabled,
+  })
 
   return (
     <div className={`practice ${drawingEnabled ? 'drawing-active' : ''}`}>
@@ -160,6 +173,13 @@ export function Practice() {
           <button key={k} className={typeFilter === k ? 'btn active' : 'btn'} onClick={() => handleTypeChange(k)}>{v}</button>
         ))}
         <button className={favOnly ? 'btn active fav-btn' : 'btn fav-btn'} onClick={handleFavFilter}>★ 收藏</button>
+        <button
+          type="button"
+          className={`btn reveal-answers-btn ${revealAllAnswers ? 'active' : ''}`}
+          onClick={() => setRevealAllAnswers(v => !v)}
+        >
+          {revealAllAnswers ? '隐藏答案' : '显示答案'}
+        </button>
       </div>
 
       <div className="progress-bar">
@@ -180,7 +200,12 @@ export function Practice() {
         </div>
       )}
 
-      <div className="practice-content-wrapper">
+      <div
+        className="practice-content-wrapper swipe-question-area"
+        onTouchStart={swipeNav.onTouchStart}
+        onTouchEnd={swipeNav.onTouchEnd}
+        onTouchCancel={swipeNav.onTouchCancel}
+      >
         <div className="question-card">
           <div className="question-header-row">
             <div className="question-type">{TYPE_LABELS[currentQ.qtype]}</div>
@@ -221,12 +246,12 @@ export function Practice() {
                 const isCorrect = currentQ.answer === letter
                 const isSelected = selectedOption === letter
                 let className = 'option'
-                if (showAnswer) {
+                if (answerVisible) {
                   if (isCorrect) className += ' correct'
                   else if (isSelected) className += ' wrong'
                 }
                 return (
-                  <div key={i} className={className} onClick={() => !showAnswer && handleOptionSelect(letter)}>
+                  <div key={i} className={className} onClick={() => !answerVisible && handleOptionSelect(letter)}>
                     <span className="option-letter">{letter}.</span> <MixedLatex>{opt}</MixedLatex>
                   </div>
                 )
@@ -240,12 +265,12 @@ export function Practice() {
                 const isCorrect = currentQ.answer === opt
                 const isSelected = selectedOption === opt
                 let className = 'option'
-                if (showAnswer) {
+                if (answerVisible) {
                   if (isCorrect) className += ' correct'
                   else if (isSelected) className += ' wrong'
                 }
                 return (
-                  <div key={opt} className={className} onClick={() => !showAnswer && handleOptionSelect(opt)}>
+                  <div key={opt} className={className} onClick={() => !answerVisible && handleOptionSelect(opt)}>
                     {opt}
                   </div>
                 )
@@ -253,11 +278,11 @@ export function Practice() {
             </div>
           )}
 
-          {!showAnswer && !currentQ.options && currentQ.qtype !== 'truefalse' && (
-            <button className="btn primary" onClick={handleShowAnswer}>显示答案</button>
+          {!answerVisible && !currentQ.options && currentQ.qtype !== 'truefalse' && (
+            <button className="btn primary" onClick={handleShowAnswer}>显示本题答案</button>
           )}
 
-          {showAnswer && (
+          {answerVisible && (
             <div className="answer-section">
               <div className="answer">
                 <strong>答案：</strong>
