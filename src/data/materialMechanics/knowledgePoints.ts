@@ -28,7 +28,7 @@ export const materialMechanicsKnowledgePoints: KnowledgePoint[] = [
     title: '截面几何性质',
     chapter: '03',
     types: ['single'],
-    body: '矩形截面对形心轴的惯性矩：$I_z=\\frac{bh^3}{12}$，$I_y=\\frac{hb^3}{12}$（注意高宽对应关系）。',
+    body: '矩形截面对形心轴的惯性矩：$I_z=\\dfrac{bh^3}{12}$，$I_y=\\dfrac{hb^3}{12}$（$b$ 为水平边长，$h$ 为竖直边长）。',
     formulas: [],
     examples: ['mat-p1-single-04'],
     difficulty: 2,

@@ -132,10 +132,10 @@ export const materialMechanicsQuestions: Question[] = [
     qtype: 'single',
     stem: '矩形截面对 $z$、$y$ 两形心轴的惯性矩分别为（ ）（$b$ 为水平边长，$h$ 为竖直边长）。',
     options: [
-      '$I_z=\\frac{bh^2}{12}$，$I_y=\\frac{hb^2}{12}$',
-      '$I_z=\\frac{hb^2}{12}$，$I_y=\\frac{bh^2}{12}$',
-      '$I_z=\\frac{hb^3}{12}$，$I_y=\\frac{bh^3}{12}$',
-      '$I_z=\\frac{bh^3}{12}$，$I_y=\\frac{hb^3}{12}$'
+      '$I_z=\\dfrac{bh^2}{12}$，$I_y=\\dfrac{hb^2}{12}$',
+      '$I_z=\\dfrac{hb^2}{12}$，$I_y=\\dfrac{bh^2}{12}$',
+      '$I_z=\\dfrac{hb^3}{12}$，$I_y=\\dfrac{bh^3}{12}$',
+      '$I_z=\\dfrac{bh^3}{12}$，$I_y=\\dfrac{hb^3}{12}$'
     ],
     answer: 'D',
     kp: ['mat-kp-03'],
@@ -161,7 +161,7 @@ export const materialMechanicsQuestions: Question[] = [
     id: 'mat-p1-single-06',
     qtype: 'single',
     stem: '某二向应力状态单元体的应力圆如图所示，则单元体内最大切应力为（ ）。',
-    options: ['$\\sigma_1$', '$\\sigma_2$', '$\\frac{\\sigma_1-\\sigma_2}{2}$', '$\\frac{\\sigma_1+\\sigma_2}{2}$'],
+    options: ['$\\sigma_1$', '$\\sigma_2$', '$\\dfrac{\\sigma_1-\\sigma_2}{2}$', '$\\dfrac{\\sigma_1+\\sigma_2}{2}$'],
     answer: 'C',
     kp: ['mat-kp-06'],
     source: '材料力学试卷1',
@@ -190,7 +190,7 @@ export const materialMechanicsQuestions: Question[] = [
   {
     id: 'mat-p1-single-09',
     qtype: 'single',
-    stem: '单位长度的扭转角 $\\varphi\'$ 与（ ）无关。',
+    stem: '单位长度的扭转角 $\\varphi^{\\prime}$ 与（ ）无关。',
     options: ['杆的长度', '扭矩', '材料性质', '截面几何性质'],
     answer: 'A',
     kp: ['mat-kp-02'],
@@ -349,7 +349,7 @@ export const materialMechanicsQuestions: Question[] = [
     id: 'mat-p2-single-07',
     qtype: 'single',
     stem: '矩形与正方形截面面积相同，对对称轴 $x$ 惯性矩 $I_x^a,I_x^b$，对 $y$ 轴 $I_y^a,I_y^b$，则（ ）。',
-    options: ['$I_x^a<I_x^b,\\ I_y^a<I_y^b$', '$I_x^a<I_x^b,\\ I_y^a>I_y^b$', '$I_x^a>I_x^b,\\ I_y^a<I_y^b$', '$I_x^a>I_x^b,\\ I_y^a>I_y^b$'],
+    options: ['$I_x^a<I_x^b,\\; I_y^a<I_y^b$', '$I_x^a<I_x^b,\\; I_y^a>I_y^b$', '$I_x^a>I_x^b,\\; I_y^a<I_y^b$', '$I_x^a>I_x^b,\\; I_y^a>I_y^b$'],
     answer: 'C',
     kp: ['mat-kp-03'],
     source: '材料力学试卷2',
@@ -359,7 +359,7 @@ export const materialMechanicsQuestions: Question[] = [
     id: 'mat-p2-single-08',
     qtype: 'single',
     stem: '梁两种搁置方式下最大正应力之比 $(\\sigma_{\\max})_a/(\\sigma_{\\max})_b$ 为（ ）。',
-    options: ['$1/4$', '$1/16$', '$1/64$', '$16$'],
+    options: ['$\\dfrac{1}{4}$', '$\\dfrac{1}{16}$', '$\\dfrac{1}{64}$', '$16$'],
     answer: 'A',
     kp: ['mat-kp-04'],
     source: '材料力学试卷2',
@@ -523,7 +523,7 @@ export const materialMechanicsQuestions: Question[] = [
     id: 'mat-p4-single-02',
     qtype: 'single',
     stem: '变截面圆轴截面扭矩正确的是（ ）。',
-    options: ['$T_1=3\\mathrm{N\\cdot m}$，$T_2=T_3=2\\mathrm{N\\cdot m}$', '$T_1=3$，$T_2=T_3=-2$', '$T_1=-3$，$T_2=T_3=-2$', '$T_1=3$，$T_2=T_3=5$'],
+    options: ['$T_1=3\\,\\mathrm{N\\cdot m}$，$T_2=T_3=2\\,\\mathrm{N\\cdot m}$', '$T_1=3\\,\\mathrm{N\\cdot m}$，$T_2=T_3=-2\\,\\mathrm{N\\cdot m}$', '$T_1=-3\\,\\mathrm{N\\cdot m}$，$T_2=T_3=-2\\,\\mathrm{N\\cdot m}$', '$T_1=3\\,\\mathrm{N\\cdot m}$，$T_2=T_3=5\\,\\mathrm{N\\cdot m}$'],
     answer: 'B',
     kp: ['mat-kp-02'],
     source: '材料力学试卷4',
@@ -601,10 +601,10 @@ export const materialMechanicsQuestions: Question[] = [
     qtype: 'single',
     stem: '用第三强度理论校核圆轴弯扭组合时，强度条件为（ ）。',
     options: [
-      '$\\sqrt{(M/W_z)^2+4(T/W_p)^2}\\leq[\\sigma]$',
-      '$\\sqrt{(M/W_z)^2+3(T/W_p)^2}\\leq[\\sigma]$',
-      '$\\sqrt{(M/W_z)^2+(T/W_p)^2}\\leq[\\sigma]$',
-      '$M/W_z+T/W_p\\leq[\\sigma]$'
+      '$\\sqrt{\\left(\\dfrac{M}{W_z}\\right)^2+4\\left(\\dfrac{T}{W_p}\\right)^2}\\leq[\\sigma]$',
+      '$\\sqrt{\\left(\\dfrac{M}{W_z}\\right)^2+3\\left(\\dfrac{T}{W_p}\\right)^2}\\leq[\\sigma]$',
+      '$\\sqrt{\\left(\\dfrac{M}{W_z}\\right)^2+\\left(\\dfrac{T}{W_p}\\right)^2}\\leq[\\sigma]$',
+      '$\\dfrac{M}{W_z}+\\dfrac{T}{W_p}\\leq[\\sigma]$'
     ],
     answer: 'A',
     kp: ['mat-kp-06'],
@@ -647,5 +647,338 @@ export const materialMechanicsQuestions: Question[] = [
     kp: ['mat-kp-08'],
     source: '材料力学试卷5',
     difficulty: 1
+  },
+
+  {
+    id: 'mat-p5-single-03',
+    qtype: 'single',
+    stem: '图示梁弯曲变形后挠曲线的大致形状是（ ）（需结合原图）。',
+    options: ['对称下挠', '一端翘起', 'S 形', '保持直线'],
+    answer: 'D',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-single-04',
+    qtype: 'single',
+    stem: '矩形截面梁弯曲时，横截面上的应力沿高度方向（ ）。',
+    options: [
+      '$\\sigma$、$\\tau$ 都按线性分布',
+      '$\\sigma$、$\\tau$ 都按二次分布',
+      '$\\sigma$ 线性、$\\tau$ 二次',
+      '$\\sigma$ 二次、$\\tau$ 线性'
+    ],
+    answer: 'C',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-single-05',
+    qtype: 'single',
+    stem: '受拉平板在中间开槽改为上侧开槽后，横截面内最大应力（ ）。',
+    options: ['相同', '变大', '变小', '不一定'],
+    answer: 'B',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-single-07',
+    qtype: 'single',
+    stem: '圆筒形储气罐表面可近似为二向应力状态，则（ ）。',
+    options: ['$\\sigma_t=\\sigma_m$', '$\\sigma_t>\\sigma_m$', '$\\sigma_t<\\sigma_m$', '不确定'],
+    answer: 'B',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-single-09',
+    qtype: 'single',
+    stem: '横截面等其它条件相同，压杆采用（ ）截面稳定性最好（需结合原图）。',
+    options: ['开口薄壁', '实心圆', '工字形', '正方形'],
+    answer: 'D',
+    kp: ['mat-kp-08'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-single-10',
+    qtype: 'single',
+    stem: '四根压杆材料、截面相同，纸面内失稳先后次序为（ ）。',
+    options: ['(a),(b),(c),(d)', '(d),(a),(b),(c)', '(c),(d),(a),(b)', '(b),(c),(d),(a)'],
+    answer: 'A',
+    kp: ['mat-kp-08'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-tf-03',
+    qtype: 'truefalse',
+    stem: '等截面直杆轴向拉压时各截面上只有正应力，剪应力为零。',
+    answer: '错',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p5-tf-04',
+    qtype: 'truefalse',
+    stem: '脆性材料构件的安全系数一般大于塑性材料，主要是因为脆性材料强度较低。',
+    answer: '错',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-tf-05',
+    qtype: 'truefalse',
+    stem: '铸铁试件拉伸试验不会出现局部变形阶段。',
+    answer: '对',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p5-tf-06',
+    qtype: 'truefalse',
+    stem: '切应力互等定理对非纯剪切状态也成立。',
+    answer: '对',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-tf-07',
+    qtype: 'truefalse',
+    stem: '提高梁弯曲强度的措施可用来提高弯曲刚度；反之亦然。',
+    answer: '错',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-tf-08',
+    qtype: 'truefalse',
+    stem: '自重下安全的悬臂梁，尺寸同比例放大后仍安全。',
+    answer: '错',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-tf-09',
+    qtype: 'truefalse',
+    stem: '按第三强度理论校核安全的构件，按第四强度理论校核必定也安全。',
+    answer: '对',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+
+  {
+    id: 'mat-p3-fill-01',
+    qtype: 'fill',
+    stem: '工程上通常按______的大小把材料分为塑性材料和脆性材料。',
+    answer: '伸长率',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷3',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p3-fill-02',
+    qtype: 'fill',
+    stem: '按第三强度理论，图示单元体（图 1）的相当应力为______ $\mathrm{MPa}$。',
+    answer: '80',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷3',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p3-fill-03',
+    qtype: 'fill',
+    stem: '厂房“鱼腹梁”依据材料力学中的______概念设计。',
+    answer: '等强度梁',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷3',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p3-fill-04',
+    qtype: 'fill',
+    stem: '压杆 1 一端固定一端自由，压杆 2 两端固定，材料截面长度相同，临界力之比 $F_{cr1}:F_{cr2}=$______。',
+    answer: '1/16',
+    analysis: '亦写 $\\dfrac{1}{16}$。',
+    kp: ['mat-kp-08'],
+    source: '材料力学试卷3',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p3-fill-05',
+    qtype: 'fill',
+    stem: '插销剪切面面积为______，挤压面面积为______（用文字或公式作答）。',
+    answer: ['$\\pi d h/4$', '$\\pi(D^2-d^2)/4$'],
+    analysis: '参考答案：剪切 $\\pi d h/4$，挤压 $\\pi(D^2-d^2)/4$。',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷3',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p3-fill-06',
+    qtype: 'fill',
+    stem: '跨度 $2l$ 悬臂梁抗拉刚度 $EA$，C 处受 $3F$，自由端水平位移为______。',
+    answer: '-6Fl/EA',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷3',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p3-fill-07',
+    qtype: 'fill',
+    stem: '悬臂梁 $EIw^{\\prime\\prime}=$______；固定端边界条件（挠度与转角）为______。',
+    answer: ['$-Fx$', '固定端挠度、转角均为零'],
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷3',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p3-fill-08',
+    qtype: 'fill',
+    stem: '铸铁 T 形截面悬臂梁为提高弯曲强度，T 字头合理朝向为______。',
+    answer: '朝下',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷3',
+    difficulty: 2
+  },
+
+  {
+    id: 'mat-p2-fill-01',
+    qtype: 'fill',
+    stem: '四个铆钉连接钢板，$d=16\mathrm{mm}$，$\\delta=10\mathrm{mm}$，$F=90\mathrm{kN}$，铆钉切应力 $\\tau=$______，挤压应力 $\\sigma_{bs}=$______。',
+    answer: ['112MPa', '142MPa'],
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷2',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p2-fill-02',
+    qtype: 'fill',
+    stem: '变形固体的三个基本假设是______、______、______。',
+    answer: ['连续性', '均匀性', '各向同性'],
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷2',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p2-fill-03',
+    qtype: 'fill',
+    stem: '圆形的形心主惯性轴有______条。',
+    answer: '无数多',
+    kp: ['mat-kp-03'],
+    source: '材料力学试卷2',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p2-fill-04',
+    qtype: 'fill',
+    stem: '已知 $w_C=-\\dfrac{Fa^3}{3EI}$，$\\theta_C=-\\dfrac{Fa^2}{2EI}$，则 B 截面挠度 $w_B=$______，转角 $\\theta_B=$______。',
+    answer: ['$-\\dfrac{Fa^2(3l-a)}{6EI}$', '$-\\dfrac{Fa^2}{2EI}$'],
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷2',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p2-fill-05',
+    qtype: 'fill',
+    stem: '圆截面杆扭转时，最大拉应力发生在______截面；最大切应力发生在______截面。',
+    answer: ['45°斜', '横'],
+    kp: ['mat-kp-02'],
+    source: '材料力学试卷2',
+    difficulty: 2
+  },
+
+  {
+    id: 'mat-p5-fill-01',
+    qtype: 'fill',
+    stem: '材料的力学性能指在外力作用下表现出的变形和______等方面的性能。',
+    answer: '破坏',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p5-fill-02',
+    qtype: 'fill',
+    stem: '衡量材料塑性的两个重要指标是伸长率和______。',
+    answer: '断面收缩率',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 1
+  },
+  {
+    id: 'mat-p5-fill-03',
+    qtype: 'fill',
+    stem: '图示铆钉计算挤压强度时，挤压面积 $A_{bs}=$______。',
+    answer: 'td',
+    analysis: '即 $t\\times d$（板厚乘直径）。',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-04',
+    qtype: 'fill',
+    stem: '阶梯轴 AB 段与 BC 段最大切应力之比 $\\tau_{\max1}/\\tau_{\max2}=$______。',
+    answer: '3/8',
+    kp: ['mat-kp-02'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-05',
+    qtype: 'fill',
+    stem: '用积分法求图示梁挠曲线时将引入______个积分常数。',
+    answer: '4',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-06',
+    qtype: 'fill',
+    stem: '第二强度理论又称______。',
+    answer: '最大拉应变理论',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-07',
+    qtype: 'fill',
+    stem: '图示单元体第 3 主应力 $\\sigma_3=$______ $\mathrm{MPa}$。',
+    answer: '-50',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-08',
+    qtype: 'fill',
+    stem: '图示曲杆 AB 段为______组合变形。',
+    answer: '拉弯',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p5-fill-09',
+    qtype: 'fill',
+    stem: 'T 型截面梁高 $12\mathrm{cm}$，上缘 A、下缘 B 弯曲正应力分别为 $-5\mathrm{MPa}$、$10\mathrm{MPa}$，中性轴距下缘 $\\delta=$______ $\mathrm{cm}$。',
+    answer: '4',
+    kp: ['mat-kp-04'],
+    source: '材料力学试卷5',
+    difficulty: 3
   }
 ]

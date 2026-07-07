@@ -19,7 +19,7 @@ export const materialMechanicsFormulas: Formula[] = [
   },
   {
     id: 'mat-f-03',
-    latex: '\\varphi\' = \\frac{T}{G I_p}',
+    latex: '\\varphi^{\\prime} = \\frac{T}{G I_p}',
     chapter: '02',
     mnemonic: '单位长度扭转角',
     usage: '扭转刚度',
