@@ -14,30 +14,56 @@ interface Point {
   pressure: number
 }
 
-const COLORS = ['#000000', '#e74c3c', '#3498db', '#27ae60', '#f39c12', '#9b59b6']
+const COLORS = ['#1a1a1a', '#e74c3c', '#3498db', '#27ae60', '#f39c12', '#9b59b6']
 const BRUSH_SIZES = [2, 4, 6, 8, 12]
-const ERASER_SIZES = [10, 20, 30, 40]
-const MIN_DISTANCE = 1.5
-const PRESSURE_SMOOTHING = 0.3
-const MAX_HISTORY = 20
+const ERASER_SIZES = [12, 20, 32, 44]
+const MIN_DISTANCE = 1.2
+const PRESSURE_SMOOTHING = 0.35
+const MAX_HISTORY = 24
 const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+function IconPen({ active }: { active?: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path d="M13.5 6.5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      {active && <circle cx="18" cy="6" r="2.5" fill="currentColor" className="ink-fab-dot" />}
+    </svg>
+  )
+}
+
+function IconCheck() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M5 12l4 4L19 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, onToggleDrawing }: OverlayCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
   const [color, setColor] = useState('#e74c3c')
   const [brushSize, setBrushSize] = useState(isMobile ? 6 : 4)
-  const [eraserSize, setEraserSize] = useState(isMobile ? 30 : 20)
+  const [eraserSize, setEraserSize] = useState(isMobile ? 32 : 20)
   const [isEraser, setIsEraser] = useState(false)
   const [showToolbar, setShowToolbar] = useState(false)
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
+  const [dockExpanded, setDockExpanded] = useState(false)
 
   const pendingPointsRef = useRef<Point[]>([])
   const lastPointRef = useRef<Point | null>(null)
   const smoothedPressureRef = useRef(0.5)
   const isDrawingRef = useRef(false)
+  const strokeStartedRef = useRef(false)
   const saveTimeoutRef = useRef<number | null>(null)
   const rafRef = useRef<number | null>(null)
   const initializedRef = useRef(false)
@@ -52,7 +78,7 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     if (!canvas || !container) return
 
     const rect = container.getBoundingClientRect()
-    const dpr = window.devicePixelRatio || 1
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
     const width = Math.round(rect.width)
     const height = Math.round(rect.height)
 
@@ -73,9 +99,10 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
 
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: true })
     if (ctx) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.imageSmoothingEnabled = true
       ctxRef.current = ctx
       if (hasContent && tempCanvas.width > 0) {
         const oldCssWidth = state.width || width
@@ -95,7 +122,7 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
   const saveSnapshot = useCallback(() => {
     const ctx = ctxRef.current
     const canvas = canvasRef.current
-    if (!ctx || !canvas) return
+    if (!ctx || !canvas || canvas.width === 0) return
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     historyRef.current = historyRef.current.slice(0, historyIndexRef.current + 1)
     historyRef.current.push(imageData)
@@ -113,9 +140,9 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     const ctx = ctxRef.current
     const canvas = canvasRef.current
     if (!ctx || !canvas) return
-    const imageData = historyRef.current[historyIndexRef.current]
-    ctx.putImageData(imageData, 0, 0)
+    ctx.putImageData(historyRef.current[historyIndexRef.current], 0, 0)
     updateHistoryState()
+    scheduleSaveRef.current?.()
   }, [updateHistoryState])
 
   const redo = useCallback(() => {
@@ -124,9 +151,9 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     const ctx = ctxRef.current
     const canvas = canvasRef.current
     if (!ctx || !canvas) return
-    const imageData = historyRef.current[historyIndexRef.current]
-    ctx.putImageData(imageData, 0, 0)
+    ctx.putImageData(historyRef.current[historyIndexRef.current], 0, 0)
     updateHistoryState()
+    scheduleSaveRef.current?.()
   }, [updateHistoryState])
 
   const getCanvasCoords = useCallback((e: PointerEvent | React.PointerEvent): Point => {
@@ -134,7 +161,8 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     if (!canvas) return { x: 0, y: 0, pressure: 0.5 }
     const rect = canvas.getBoundingClientRect()
     const rawPressure = e.pressure > 0 ? e.pressure : 0.5
-    smoothedPressureRef.current = smoothedPressureRef.current * (1 - PRESSURE_SMOOTHING) + rawPressure * PRESSURE_SMOOTHING
+    smoothedPressureRef.current =
+      smoothedPressureRef.current * (1 - PRESSURE_SMOOTHING) + rawPressure * PRESSURE_SMOOTHING
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -150,144 +178,186 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     return dx * dx + dy * dy >= MIN_DISTANCE * MIN_DISTANCE
   }, [])
 
-  const drawSegment = useCallback((p0: Point, p1: Point, p2?: Point) => {
-    const ctx = ctxRef.current
-    if (!ctx) return
+  const strokeWidth = useCallback(
+    (p0: Point, p1: Point) => {
+      if (isEraser) return eraserSize
+      const avg = (p0.pressure + p1.pressure) / 2
+      return Math.max(1, brushSize * (0.45 + 0.55 * avg))
+    },
+    [brushSize, eraserSize, isEraser]
+  )
 
-    ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : color
-    ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over'
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
+  const drawSegment = useCallback(
+    (p0: Point, p1: Point, p2?: Point) => {
+      const ctx = ctxRef.current
+      if (!ctx) return
 
-    const lineWidth = isEraser ? eraserSize : brushSize * (p0.pressure + p1.pressure)
-    ctx.lineWidth = Math.max(1, lineWidth)
+      ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : color
+      ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over'
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.lineWidth = strokeWidth(p0, p1)
 
-    ctx.beginPath()
-    if (p2) {
-      const midX1 = (p0.x + p1.x) / 2
-      const midY1 = (p0.y + p1.y) / 2
-      const midX2 = (p1.x + p2.x) / 2
-      const midY2 = (p1.y + p2.y) / 2
-      ctx.moveTo(midX1, midY1)
-      ctx.quadraticCurveTo(p1.x, p1.y, midX2, midY2)
-    } else {
-      ctx.moveTo(p0.x, p0.y)
-      ctx.lineTo(p1.x, p1.y)
-    }
-    ctx.stroke()
-    ctx.globalCompositeOperation = 'source-over'
-  }, [color, brushSize, eraserSize, isEraser])
+      ctx.beginPath()
+      if (p2) {
+        const midX1 = (p0.x + p1.x) / 2
+        const midY1 = (p0.y + p1.y) / 2
+        const midX2 = (p1.x + p2.x) / 2
+        const midY2 = (p1.y + p2.y) / 2
+        ctx.moveTo(midX1, midY1)
+        ctx.quadraticCurveTo(p1.x, p1.y, midX2, midY2)
+      } else {
+        ctx.moveTo(p0.x, p0.y)
+        ctx.lineTo(p1.x, p1.y)
+      }
+      ctx.stroke()
+      ctx.globalCompositeOperation = 'source-over'
+    },
+    [color, isEraser, strokeWidth]
+  )
 
   const flushPendingPoints = useCallback(() => {
     const points = pendingPointsRef.current
     if (points.length < 2) return
 
     for (let i = 1; i < points.length; i++) {
-      const p0 = points[i - 1]
-      const p1 = points[i]
-      const p2 = points[i + 1]
-      drawSegment(p0, p1, p2)
+      drawSegment(points[i - 1], points[i], points[i + 1])
     }
 
-    if (points.length > 2) {
-      pendingPointsRef.current = points.slice(-2)
-    }
+    pendingPointsRef.current = points.length > 2 ? points.slice(-2) : points
   }, [drawSegment])
+
+  const scheduleSaveRef = useRef<() => void>(() => {})
 
   const scheduleSave = useCallback(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
     saveTimeoutRef.current = window.setTimeout(() => {
       const canvas = canvasRef.current
       if (!canvas) return
-      canvas.toBlob(blob => {
-        if (blob) {
+      canvas.toBlob(
+        blob => {
+          if (!blob) return
           const reader = new FileReader()
           reader.onloadend = () => {
-            if (typeof reader.result === 'string') {
-              onSave(reader.result)
-            }
+            if (typeof reader.result === 'string') onSave(reader.result)
           }
           reader.readAsDataURL(blob)
-        }
-      }, 'image/png')
-    }, 800)
+        },
+        'image/png',
+        0.92
+      )
+    }, 500)
   }, [onSave])
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    if (disabled || !drawingEnabled) return
+  scheduleSaveRef.current = scheduleSave
 
-    activePointersRef.current.add(e.pointerId)
-    if (activePointersRef.current.size > 1) {
-      isDrawingRef.current = false
-      return
-    }
+  const endStroke = useCallback(
+    (e?: React.PointerEvent) => {
+      if (!isDrawingRef.current) return
 
-    e.preventDefault()
-    e.stopPropagation()
-    e.currentTarget.setPointerCapture(e.pointerId)
-
-    saveSnapshot()
-    smoothedPressureRef.current = 0.5
-    const point = getCanvasCoords(e.nativeEvent)
-    pendingPointsRef.current = [point]
-    lastPointRef.current = point
-    isDrawingRef.current = true
-  }, [disabled, drawingEnabled, getCanvasCoords, saveSnapshot])
-
-  const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDrawingRef.current || disabled || !drawingEnabled) return
-    e.preventDefault()
-    e.stopPropagation()
-
-    const coalescedEvents = (e.nativeEvent as PointerEvent).getCoalescedEvents?.() || [e.nativeEvent]
-    for (const evt of coalescedEvents) {
-      const point = getCanvasCoords(evt)
-      if (shouldAddPoint(point)) {
-        pendingPointsRef.current.push(point)
-        lastPointRef.current = point
+      if (e) {
+        try {
+          e.currentTarget.releasePointerCapture(e.pointerId)
+        } catch {
+          /* already released */
+        }
       }
-    }
 
-    if (rafRef.current) return
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = null
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+
+      if (e && strokeStartedRef.current) {
+        const endPoint = getCanvasCoords(e.nativeEvent)
+        const last = lastPointRef.current
+        if (last && (endPoint.x !== last.x || endPoint.y !== last.y)) {
+          pendingPointsRef.current.push(endPoint)
+        }
+      }
+
       flushPendingPoints()
-    })
-  }, [disabled, drawingEnabled, getCanvasCoords, shouldAddPoint, flushPendingPoints])
 
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
-    activePointersRef.current.delete(e.pointerId)
-
-    if (!isDrawingRef.current) return
-    e.currentTarget.releasePointerCapture(e.pointerId)
-
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current)
-      rafRef.current = null
-    }
-
-    flushPendingPoints()
-
-    const points = pendingPointsRef.current
-    if (points.length === 1) {
-      const ctx = ctxRef.current
-      if (ctx) {
-        const p = points[0]
-        const size = isEraser ? eraserSize : brushSize * p.pressure * 2
-        ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over'
-        ctx.fillStyle = isEraser ? 'rgba(0,0,0,1)' : color
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, Math.max(1, size / 2), 0, Math.PI * 2)
-        ctx.fill()
-        ctx.globalCompositeOperation = 'source-over'
+      const points = pendingPointsRef.current
+      if (points.length === 1) {
+        const ctx = ctxRef.current
+        if (ctx) {
+          const p = points[0]
+          const size = isEraser ? eraserSize : brushSize * (0.45 + 0.55 * p.pressure)
+          ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over'
+          ctx.fillStyle = isEraser ? 'rgba(0,0,0,1)' : color
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, Math.max(0.5, size / 2), 0, Math.PI * 2)
+          ctx.fill()
+          ctx.globalCompositeOperation = 'source-over'
+        }
       }
-    }
 
-    pendingPointsRef.current = []
-    lastPointRef.current = null
-    isDrawingRef.current = false
-    scheduleSave()
-  }, [flushPendingPoints, scheduleSave, isEraser, eraserSize, brushSize, color])
+      pendingPointsRef.current = []
+      lastPointRef.current = null
+      isDrawingRef.current = false
+      strokeStartedRef.current = false
+      scheduleSave()
+    },
+    [flushPendingPoints, scheduleSave, isEraser, eraserSize, brushSize, color, getCanvasCoords]
+  )
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (disabled || !drawingEnabled) return
+
+      activePointersRef.current.add(e.pointerId)
+      if (activePointersRef.current.size > 1) {
+        isDrawingRef.current = false
+        return
+      }
+
+      e.preventDefault()
+      e.stopPropagation()
+      e.currentTarget.setPointerCapture(e.pointerId)
+
+      saveSnapshot()
+      smoothedPressureRef.current = e.pressure > 0 ? e.pressure : 0.5
+      const point = getCanvasCoords(e.nativeEvent)
+      pendingPointsRef.current = [point]
+      lastPointRef.current = point
+      isDrawingRef.current = true
+      strokeStartedRef.current = true
+    },
+    [disabled, drawingEnabled, getCanvasCoords, saveSnapshot]
+  )
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDrawingRef.current || disabled || !drawingEnabled) return
+      e.preventDefault()
+      e.stopPropagation()
+
+      const coalescedEvents = (e.nativeEvent as PointerEvent).getCoalescedEvents?.() || [e.nativeEvent]
+      for (const evt of coalescedEvents) {
+        const point = getCanvasCoords(evt)
+        if (shouldAddPoint(point)) {
+          pendingPointsRef.current.push(point)
+          lastPointRef.current = point
+        }
+      }
+
+      if (rafRef.current) return
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null
+        flushPendingPoints()
+      })
+    },
+    [disabled, drawingEnabled, getCanvasCoords, shouldAddPoint, flushPendingPoints]
+  )
+
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      activePointersRef.current.delete(e.pointerId)
+      endStroke(e)
+    },
+    [endStroke]
+  )
 
   const clearCanvas = useCallback(() => {
     const ctx = ctxRef.current
@@ -299,8 +369,13 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     scheduleSave()
   }, [scheduleSave, saveSnapshot])
 
+  const toggleDrawing = useCallback(() => {
+    setShowToolbar(false)
+    setDockExpanded(false)
+    onToggleDrawing()
+  }, [onToggleDrawing])
+
   useEffect(() => {
-    // 延迟初始化，确保容器尺寸已计算
     const timer = setTimeout(() => resizeCanvas(), 50)
     const handleResize = () => resizeCanvas()
     window.addEventListener('resize', handleResize)
@@ -311,9 +386,8 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
   }, [resizeCanvas])
 
   useEffect(() => {
-    if (drawingEnabled) {
-      setTimeout(() => resizeCanvas(), 10)
-    }
+    if (drawingEnabled) setTimeout(() => resizeCanvas(), 10)
+    else setDockExpanded(false)
   }, [drawingEnabled, resizeCanvas])
 
   useEffect(() => {
@@ -324,18 +398,23 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
     const ctx = ctxRef.current
     if (!ctx) return
 
+    const bootstrapHistory = () => {
+      if (historyRef.current.length === 0) saveSnapshot()
+      initializedRef.current = true
+    }
+
     if (initialData) {
       const img = new Image()
       img.onload = () => {
         const { width, height } = canvasStateRef.current
         ctx.drawImage(img, 0, 0, width, height)
-        initializedRef.current = true
+        bootstrapHistory()
       }
       img.src = initialData
     } else {
-      initializedRef.current = true
+      bootstrapHistory()
     }
-  }, [initialData, resizeCanvas])
+  }, [initialData, resizeCanvas, saveSnapshot])
 
   useEffect(() => {
     return () => {
@@ -346,15 +425,39 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
 
   useEffect(() => {
     if (!drawingEnabled) return
-    const prevent = (e: TouchEvent) => {
-      if (e.touches.length === 1) e.preventDefault()
+    const prevent = (ev: TouchEvent) => {
+      if (ev.touches.length === 1) ev.preventDefault()
     }
     document.addEventListener('touchmove', prevent, { passive: false })
     return () => document.removeEventListener('touchmove', prevent)
   }, [drawingEnabled])
 
+  useEffect(() => {
+    if (!showToolbar) return
+    const onDoc = (ev: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(ev.target as Node)) setShowToolbar(false)
+    }
+    document.addEventListener('mousedown', onDoc)
+    return () => document.removeEventListener('mousedown', onDoc)
+  }, [showToolbar])
+
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape' && drawingEnabled) {
+        setShowToolbar(false)
+        setDockExpanded(false)
+        onToggleDrawing()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [drawingEnabled, onToggleDrawing])
+
   return (
-    <div className={`overlay-canvas-container ${drawingEnabled ? 'drawing-mode' : ''} ${isMobile ? 'mobile' : ''}`} ref={containerRef}>
+    <div
+      className={`overlay-canvas-container ${drawingEnabled ? 'drawing-mode' : ''} ${isMobile ? 'mobile' : ''} ${dockExpanded ? 'dock-open' : ''}`}
+      ref={containerRef}
+    >
       <canvas
         ref={canvasRef}
         className="overlay-canvas"
@@ -366,52 +469,123 @@ export function OverlayCanvas({ initialData, onSave, disabled, drawingEnabled, o
         onPointerCancel={handlePointerUp}
       />
 
-      <div className="overlay-toolbar">
-        <button className={`overlay-tool-btn ${drawingEnabled ? 'active' : ''}`} onClick={onToggleDrawing} title={drawingEnabled ? '退出手写' : '开始手写'}>
-          {drawingEnabled ? '✓' : '✏️'}
+      <div className="ink-fab-stack" role="toolbar" aria-label="手写工具">
+        <button
+          type="button"
+          className={`ink-fab ink-fab-main ${drawingEnabled ? 'is-active' : ''}`}
+          onClick={toggleDrawing}
+          title={drawingEnabled ? '完成手写 (Esc)' : '手写草稿'}
+          aria-pressed={drawingEnabled}
+        >
+          <span className="ink-fab-icon">{drawingEnabled ? <IconCheck /> : <IconPen />}</span>
+          {!drawingEnabled && <span className="ink-fab-ring" aria-hidden />}
         </button>
 
         {drawingEnabled && (
-          <>
-            <button className="overlay-tool-btn" onClick={() => setShowToolbar(!showToolbar)} title="工具设置">⚙️</button>
+          <div className={`ink-dock ${dockExpanded ? 'is-expanded' : ''}`}>
+            <button
+              type="button"
+              className="ink-dock-toggle"
+              onClick={() => setDockExpanded(v => !v)}
+              aria-expanded={dockExpanded}
+              title={dockExpanded ? '收起工具' : '展开工具'}
+            >
+              <span className="ink-dock-chevron" />
+            </button>
 
-            {showToolbar && (
-              <div className="overlay-tool-menu">
-                <div className="menu-section">
-                  <span>画笔</span>
-                  <div className="color-options">
-                    {COLORS.map(c => (
-                      <button key={c} className={`color-btn ${color === c && !isEraser ? 'active' : ''}`} style={{ background: c }} onClick={() => { setColor(c); setIsEraser(false) }} />
-                    ))}
-                  </div>
-                  <div className="size-options">
-                    {BRUSH_SIZES.map(size => (
-                      <button key={size} className={`size-btn ${brushSize === size && !isEraser ? 'active' : ''}`} onClick={() => { setBrushSize(size); setIsEraser(false) }}>
-                        <span style={{ width: size * 2, height: size * 2, background: color, borderRadius: '50%', display: 'block' }} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="menu-section">
-                  <span>橡皮擦</span>
-                  <div className="size-options">
-                    {ERASER_SIZES.map(size => (
-                      <button key={size} className={`size-btn ${eraserSize === size && isEraser ? 'active' : ''}`} onClick={() => { setEraserSize(size); setIsEraser(true) }}>
-                        <span style={{ width: size / 2, height: size / 2, background: '#ccc', borderRadius: '50%', display: 'block' }} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            <div className="ink-dock-tools">
+              <button
+                type="button"
+                className={`ink-tool-btn ${showToolbar ? 'active' : ''}`}
+                onClick={() => setShowToolbar(v => !v)}
+                title="画笔与颜色"
+              >
+                <span className="ink-tool-swatch" style={{ background: isEraser ? '#94a3b8' : color }} />
+              </button>
+              <button
+                type="button"
+                className={`ink-tool-btn ${isEraser ? 'active' : ''}`}
+                onClick={() => setIsEraser(v => !v)}
+                title="橡皮擦"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M21 21l-5-5M3 21l9-9 5 5-9 9H3v-5z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button type="button" className="ink-tool-btn" onClick={undo} disabled={disabled || !canUndo} title="撤销">
+                ↶
+              </button>
+              <button type="button" className="ink-tool-btn" onClick={redo} disabled={disabled || !canRedo} title="重做">
+                ↷
+              </button>
+              <button type="button" className="ink-tool-btn ink-tool-danger" onClick={clearCanvas} disabled={disabled} title="清空">
+                ⌫
+              </button>
+            </div>
+          </div>
+        )}
+
+        {drawingEnabled && showToolbar && (
+          <div className="ink-palette" ref={menuRef}>
+            <div className="ink-palette-section">
+              <span className="ink-palette-label">颜色</span>
+              <div className="ink-palette-colors">
+                {COLORS.map(c => (
+                  <button
+                    key={c}
+                    type="button"
+                    className={`ink-color-dot ${color === c && !isEraser ? 'active' : ''}`}
+                    style={{ background: c }}
+                    onClick={() => {
+                      setColor(c)
+                      setIsEraser(false)
+                    }}
+                    aria-label={`颜色 ${c}`}
+                  />
+                ))}
               </div>
-            )}
-
-            <button className={`overlay-tool-btn ${isEraser ? 'active' : ''}`} onClick={() => setIsEraser(!isEraser)} title="橡皮擦">🧹</button>
-            <button className="overlay-tool-btn" onClick={undo} disabled={disabled || !canUndo} title="撤销">↩️</button>
-            <button className="overlay-tool-btn" onClick={redo} disabled={disabled || !canRedo} title="重做">↪️</button>
-            <button className="overlay-tool-btn" onClick={clearCanvas} disabled={disabled} title="清空手写">🗑️</button>
-          </>
+            </div>
+            <div className="ink-palette-section">
+              <span className="ink-palette-label">粗细</span>
+              <div className="ink-palette-sizes">
+                {BRUSH_SIZES.map(size => (
+                  <button
+                    key={size}
+                    type="button"
+                    className={`ink-size-dot ${brushSize === size && !isEraser ? 'active' : ''}`}
+                    onClick={() => {
+                      setBrushSize(size)
+                      setIsEraser(false)
+                    }}
+                  >
+                    <span style={{ width: size + 4, height: size + 4, background: color }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="ink-palette-section">
+              <span className="ink-palette-label">橡皮</span>
+              <div className="ink-palette-sizes">
+                {ERASER_SIZES.map(size => (
+                  <button
+                    key={size}
+                    type="button"
+                    className={`ink-size-dot ${eraserSize === size && isEraser ? 'active' : ''}`}
+                    onClick={() => {
+                      setEraserSize(size)
+                      setIsEraser(true)
+                    }}
+                  >
+                    <span style={{ width: size / 2.5, height: size / 2.5, background: '#cbd5e1' }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
       </div>
+
+      {drawingEnabled && <div className="ink-mode-hint">手写模式 · 按 Esc 退出</div>}
     </div>
   )
 }

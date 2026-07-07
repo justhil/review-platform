@@ -245,7 +245,7 @@ export function ExamTake() {
       </div>
 
       {currentQ && (
-        <div className="exam-content-wrapper">
+        <div className={`exam-content-wrapper ${drawingEnabled ? 'drawing-active' : ''}`}>
           <div className="exam-content">
             <div className="question-card">
               <div className="question-header-row">

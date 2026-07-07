@@ -180,7 +180,7 @@ export function Practice() {
         </div>
       )}
 
-      <div className="practice-content-wrapper">
+      <div className={`practice-content-wrapper ${drawingEnabled ? 'drawing-active' : ''}`}>
         <div className="question-card">
           <div className="question-header-row">
             <div className="question-type">{TYPE_LABELS[currentQ.qtype]}</div>
