@@ -574,6 +574,35 @@ export const materialMechanicsQuestions: Question[] = [
     source: '材料力学试卷4',
     difficulty: 2
   },
+  {
+    id: 'mat-p4-fill-01',
+    qtype: 'fill',
+    stem: '图示木榫接头，$F$ 作用时接头剪切面积等于______。',
+    answer: 'bl',
+    analysis: '即 $b\\times l$（榫头长度×宽度）。',
+    kp: ['mat-kp-01'],
+    source: '材料力学试卷4',
+    difficulty: 2
+  },
+  {
+    id: 'mat-p4-fill-02',
+    qtype: 'fill',
+    stem: '图示单元体属______应力状态；$\\sigma_1=$______ $\mathrm{MPa}$，$\\sigma_2=$______ $\mathrm{MPa}$，$\\sigma_3=$______ $\mathrm{MPa}$。',
+    answer: ['二向', '500', '100', '0'],
+    analysis: '按试卷四参考答案主应力取值。',
+    kp: ['mat-kp-06'],
+    source: '材料力学试卷4',
+    difficulty: 3
+  },
+  {
+    id: 'mat-p4-fill-03',
+    qtype: 'fill',
+    stem: '柔度全面反映______、______、______对临界应力的影响。',
+    answer: ['杆件长度', '约束条件', '截面形状和尺寸'],
+    kp: ['mat-kp-08'],
+    source: '材料力学试卷4',
+    difficulty: 2
+  },
 
   // 试卷五
   {
